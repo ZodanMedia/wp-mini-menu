@@ -7,7 +7,7 @@
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-menu
- * License: GPL2
+ * License: GPL3
  */
 
 
