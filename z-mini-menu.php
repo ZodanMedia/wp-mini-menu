@@ -3,16 +3,16 @@
  * Plugin Name: WordPress mini admin menu
  * Plugin URI: https://zodan.nl
  * Description: A mini menu to access most common admin items when te admin bar is not active
- * Version: 0.0.1
+ * Version: 0.0.2
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-menu
- * License: GPL3
+ * License: GPL2
  */
 
 
 // Global variables
-define('Z_MINI_MENU_VER', '0.0.1');
+define('Z_MINI_MENU_VER', '0.0.2');
 define('Z_MINI_MENU_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define('Z_MINI_MENU_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 
@@ -63,9 +63,9 @@ function embed_z_mini_menu() {
 
 		// Widgets
 		if( current_user_can( 'edit_theme_options' ) ) {
-			$html_items[] = '<a href="'.admin_url('widgets.php').'" title="'.__( 'manage widgets', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-welcome-widgets-menus"><span class="sr-only">Widgets</span></span>', 'textdomain' ).'</a>';
+			$html_items[] = '<a href="'.admin_url('widgets.php').'" title="'.__( 'manage widgets', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-index-card"><span class="sr-only">Widgets</span></span>', 'textdomain' ).'</a>';
 		}
-		
+
 		// Plugins
 		if( current_user_can( 'activate_plugins' ) ) {
 			$html_items[] = '<a href="'.admin_url('plugins.php').'" title="'.__( 'Manage plugins', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-admin-plugins"><span class="sr-only">Plugins</span></span>', 'textdomain' ).'</a>';
@@ -76,6 +76,11 @@ function embed_z_mini_menu() {
 			$html_items[] = '<a href="'.admin_url('users.php').'" title="'.__( 'Manage users', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-admin-users"><span class="sr-only">Users</span></span>', 'textdomain' ).'</a>';
 		}
 
+		// ACF
+		if (class_exists('ACF') && current_user_can( 'manage_options' ) ) {
+			$html_items[] = '<a href="'.admin_url('edit.php?post_type=acf-field-group').'" title="'.__( 'Manage ACF', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-welcome-widgets-menus"><span class="sr-only">Manage ACF</span></span>', 'textdomain' ).'</a>';
+		}
+		
 		
 		
 		
