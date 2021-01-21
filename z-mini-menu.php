@@ -3,7 +3,7 @@
  * Plugin Name: WordPress mini admin menu
  * Plugin URI: https://zodan.nl
  * Description: A mini menu to access most common admin items when te admin bar is not active
- * Version: 0.0.2
+ * Version: 0.0.3
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-menu
@@ -75,13 +75,24 @@ function embed_z_mini_menu() {
 		if( current_user_can( 'edit_users' ) ) {
 			$html_items[] = '<a href="'.admin_url('users.php').'" title="'.__( 'Manage users', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-admin-users"><span class="sr-only">Users</span></span>', 'textdomain' ).'</a>';
 		}
+		
+		// WooCommerce
+		if ( class_exists( 'woocommerce' ) && current_user_can( 'manage_woocommerce' ) ) {
+			$html_items[] = '<a href="'.admin_url('admin.php?page=wc-admin').'" title="'.__( 'Manage WooCommerce', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-cart"><span class="sr-only">Manage WooCommerce</span></span>', 'textdomain' ).'</a>';
+			$html_items[] = '<a href="'.admin_url('edit.php?post_type=product').'" title="'.__( 'Manage Products', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-screenoptions"><span class="sr-only">Manage Products</span></span>', 'textdomain' ).'</a>';
+
+		}
+		
 
 		// ACF
 		if (class_exists('ACF') && current_user_can( 'manage_options' ) ) {
 			$html_items[] = '<a href="'.admin_url('edit.php?post_type=acf-field-group').'" title="'.__( 'Manage ACF', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-welcome-widgets-menus"><span class="sr-only">Manage ACF</span></span>', 'textdomain' ).'</a>';
 		}
 		
-		
+		// Logout
+		$html_items[] = '<a href="'.wp_logout_url().'" title="'.__( 'Logout', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-unlock"><span class="sr-only">Logout</span></span>', 'textdomain' ).'</a>';
+
+
 		
 		
 		
