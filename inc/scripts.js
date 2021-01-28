@@ -1,3 +1,8 @@
+/*
+ * WP Mini menu scripts
+ *
+ */
+
 'use strict';
 
 (function($) {
