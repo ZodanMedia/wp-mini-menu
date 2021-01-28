@@ -3,7 +3,7 @@
  * Plugin Name: WordPress mini admin menu
  * Plugin URI: https://zodan.nl
  * Description: A mini menu to access most common admin items when te admin bar is not active
- * Version: 0.0.3
+ * Version: 0.0.4
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-menu
@@ -36,7 +36,7 @@ function embed_z_mini_menu() {
 	// only do stuff when
 	// - we're not on the admin panel and
 	// - the admin bar is not already showing
-	if( !is_admin() && !is_admin_bar_showing() ) {
+	if( is_user_logged_in() && !is_admin() && !is_admin_bar_showing() ) {
 		
 		/*
 		 * Start the menu always with an edit post link (if we can), but let's first
