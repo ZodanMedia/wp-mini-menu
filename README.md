@@ -17,6 +17,12 @@ See https://speelwei.zodan.nl/wp-mini-menu/
 * Show a link to the menus, widgets, plugins and users sections
 
 
+## What needs to be done?
+
+* Add more items/support for major plugins
+* Make stuff configurable
+
+
 ## WordPress version support
 
 This should work as of WordPress v5.0.1
