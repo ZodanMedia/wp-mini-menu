@@ -4,7 +4,7 @@
  */
 #admin-z-mini-menu {
 	position: fixed;
-	z-index: 999;
+	z-index: 9999;
 	top: 150px;
 	left: 0;
 	display: flex;
