@@ -3,7 +3,7 @@
  * Plugin Name: Z Mini Admin Menu
  * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
  * Description: A mini menu to access most common admin items when te admin bar is not active
- * Version: 0.0.5
+ * Version: 0.0.6
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-menu
@@ -82,6 +82,46 @@ function embed_z_mini_menu() {
 				$html_items[] = '<a href="'.admin_url('network/sites.php').'" title="'.__( 'Manage the network', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-admin-multisite"><span class="sr-only">Dashboard</span></span>', 'textdomain' ).'</a>';
 			}
 		}	
+		
+		
+		// Add new posts/pages/CPTs
+		if( isset($options['use_add_new']) && $options['use_add_new'] == 1 ) {
+			$html_add_new_items = array();
+			$post_args = array(
+				'public'	=> true,
+			);
+			$output =  'objects';
+			// See: https://developer.wordpress.org/reference/functions/get_post_types/
+			$post_types = get_post_types( $post_args, $output, $operator = 'and' )	;
+
+			// z_print_r($post_types);
+			echo '<ul>';
+			foreach( $post_types as $post_type) {
+				// determine caps
+				$pto      = get_post_type_object( $post_type->name );						
+				$edit_posts_cap = $pto->cap->edit_posts;
+
+				if(current_user_can( $edit_posts_cap) ) {
+					$new_url = admin_url('post-new.php?post_type=' . $post_type->name);
+					$label = $post_type->labels->singular_name;
+					$html_add_new_items[] = '<li><a href="' . $new_url . '">' . $label . '</a></li>';
+				}
+			}
+			echo '</ul>';
+
+
+			if( !empty($html_add_new_items) ) {
+				$html_add_new = '<ul class="fold-out-sub">';
+				foreach( $html_add_new_items as $item ) {
+					$html_add_new .= $item;
+				}
+				$html_add_new .= '</ul>';
+
+				$html_items[] = '<a class="has-children" href="javascript:void();" title="'.__( 'Add new', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-plus"><span class="sr-only">Add new</span></span>', 'textdomain' ).'</a>' . $html_add_new;
+				
+			}
+		}
+	
 		
 		// Menus
 		if( current_user_can( 'edit_theme_options' ) ) {
@@ -187,7 +227,11 @@ if( isset($options['use_after_main']) && $options['use_after_main'] == 1 ) {
 
 function z_print_mini_menu_items( $html_items = array() ) {
 	foreach($html_items as $item) {
-		echo '<div class="z_mini_menu-item">';
+		$has_submenu = '';
+		if (strpos($item, 'has-children') !== false) {
+			$has_submenu = ' has-submenu';
+		}
+		echo '<div class="z_mini_menu-item'.$has_submenu.'">';
 		echo $item;
 		echo '</div>';
 	}
