@@ -3,11 +3,12 @@
 /**
  * Settings page for WordPress mini admin menu
  *
- * Version: 0.0.5
+ * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
+ *
+ * Version: 0.0.6
  * Author: Zodan
  * Author URI: https://zodan.nl
- *
- *
+ * License: GPL2
  */
 
 
@@ -47,6 +48,10 @@ function z_mini_menu_register_settings() {
 	if( is_multisite() ) {
 		add_settings_field( 'z_mini_menu_setting_network', 'WP Network', 'z_mini_menu_setting_network', 'z_mini_menu_plugin', 'main_settings' );
 	}
+	
+	
+	// Add new
+	add_settings_field( 'z_mini_menu_setting_add_new', 'Add new', 'z_mini_menu_setting_add_new', 'z_mini_menu_plugin', 'main_settings' );
 	
 	// Menus
 	add_settings_field( 'z_mini_menu_setting_menus', 'Menus', 'z_mini_menu_setting_menus', 'z_mini_menu_plugin', 'main_settings' );
@@ -126,6 +131,21 @@ function z_mini_menu_setting_network() {
 	
 	echo $html;
 }
+
+
+
+
+function z_mini_menu_setting_add_new() {
+	$options = get_option( 'z_mini_menu_plugin_options' );
+	$use_users = (isset($options['use_add_new']) && $options['use_add_new'] == 1) ? 1 : 0;
+
+    $html = '<input type="checkbox" id="use_add_new" name="z_mini_menu_plugin_options[use_add_new]" value="1"' . checked( 1, $use_users, false ) . '/>';
+    $html .= '<label for="use_add_new"> Include a link to adding new posts/pages/customs post types (depending on user capabilities)</label>';
+	
+	echo $html;
+}
+
+
 
 function z_mini_menu_setting_users() {
 	$options = get_option( 'z_mini_menu_plugin_options' );
