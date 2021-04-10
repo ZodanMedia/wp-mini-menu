@@ -1,6 +1,11 @@
-/*
- * WP Mini menu styles
- *
+/**
+ * Plugin Name: Z Mini Admin Menu
+ * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
+ * Description: A mini menu to access most common admin items when te admin bar is not active
+ * Version: 0.0.6
+ * Author: Zodan
+ * Author URI: https://zodan.nl
+ * License: GPL2
  */
 #admin-z-mini-menu {
 	position: fixed;
@@ -37,6 +42,7 @@
 	justify-content: center;
 	align-content: center;
 	align-items: center;
+	position: relative;
 }
 #admin-z-mini-menu .z_mini_menu-item a {
 	display: block;
@@ -57,6 +63,27 @@
 #admin-z-mini-menu.open .z_mini_menu-item.collapse {
 	display: flex;
 }
+#admin-z-mini-menu ul.fold-out-sub {
+	list-style: none;
+	padding-left : 0;
+	position: absolute;
+	background: #000;
+	left: 40px;
+	top: 0;
+	border-radius: 0 5px 5px 0;
+	display: none;
+}
+#admin-z-mini-menu .has-submenu:hover ul.fold-out-sub {
+	display: block;
+}
+#admin-z-mini-menu ul.fold-out-sub li {
+	list-style: none;
+	margin: 0 !important;
+	padding: 0 !important;
 
-
-
+}
+#admin-z-mini-menu ul.fold-out-sub li a {
+	padding: 6px 16px 6px 12px !important;
+	font-size: 13px !important;;
+	line-height: 16px !important;;
+}
