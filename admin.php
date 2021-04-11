@@ -49,7 +49,6 @@ function z_mini_menu_register_settings() {
 		add_settings_field( 'z_mini_menu_setting_network', 'WP Network', 'z_mini_menu_setting_network', 'z_mini_menu_plugin', 'main_settings' );
 	}
 	
-	
 	// Add new
 	add_settings_field( 'z_mini_menu_setting_add_new', 'Add new', 'z_mini_menu_setting_add_new', 'z_mini_menu_plugin', 'main_settings' );
 	
@@ -76,7 +75,6 @@ function z_mini_menu_register_settings() {
 	}
 	
 	
-	
 	add_settings_section( 'where_settings', '', 'z_mini_menu_where_section_text', 'z_mini_menu_plugin' );
 	
 	// Location
@@ -95,8 +93,6 @@ function z_mini_menu_where_section_text() {
 }
 
 
-
-
 function z_mini_menu_plugin_options_validate( $input ) {
 //    $newinput['api_key'] = trim( $input['api_key'] );
 //    if ( ! preg_match( '/^[a-z0-9]{32}$/i', $newinput['api_key'] ) ) {
@@ -105,7 +101,6 @@ function z_mini_menu_plugin_options_validate( $input ) {
 //    return $newinput;
 	return $input;
 }
-
 
 
 
@@ -120,8 +115,6 @@ function z_mini_menu_setting_location() {
 	echo $html;
 }
 
-
-
 function z_mini_menu_setting_network() {
 	$options = get_option( 'z_mini_menu_plugin_options' );
 	$use_multisite = (isset($options['use_multisite']) && $options['use_multisite'] == 1) ? 1 : 0;
@@ -132,9 +125,6 @@ function z_mini_menu_setting_network() {
 	echo $html;
 }
 
-
-
-
 function z_mini_menu_setting_add_new() {
 	$options = get_option( 'z_mini_menu_plugin_options' );
 	$use_users = (isset($options['use_add_new']) && $options['use_add_new'] == 1) ? 1 : 0;
@@ -144,8 +134,6 @@ function z_mini_menu_setting_add_new() {
 	
 	echo $html;
 }
-
-
 
 function z_mini_menu_setting_users() {
 	$options = get_option( 'z_mini_menu_plugin_options' );
