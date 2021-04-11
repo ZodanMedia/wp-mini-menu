@@ -14,13 +14,14 @@ See https://speelwei.zodan.nl/wp-mini-menu/
 * Show the WordPress "Edit post" action
 * Show a link to the Dashboard
 * Show a link to the WP Network (if available)
-* Show a link to the menus, widgets, plugins and users sections
+* Show a link to New posts (for public post types)
+* Show a link to Menus, Widgets, Plugins and Users sections
+* Show a link to ACF and WooCommerce (if available)
 
 
 ## What needs to be done?
 
 * Add more items/support for major plugins
-* Make stuff configurable
 
 
 ## WordPress version support
