@@ -12,7 +12,7 @@
 
 
 // Global variables
-define('Z_MINI_MENU_VER', '0.0.5');
+define('Z_MINI_MENU_VER', '0.0.6');
 define('Z_MINI_MENU_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define('Z_MINI_MENU_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 
@@ -38,23 +38,22 @@ function z_mini_menu_settings_link($links) {
 $z_mini_menu_basename = plugin_basename(__FILE__); 
 add_filter("plugin_action_links_" . $z_mini_menu_basename, 'z_mini_menu_settings_link' );
 
-
+// Include the admin functions
 include(Z_MINI_MENU_PLUGIN_PATH . '/admin.php');
 
 
-function z_mini_menu_css_js() {
-    wp_enqueue_style( 'z-mini-menu-css', Z_MINI_MENU_PLUGIN_URL . 'inc/style.css', $deps = false, $ver = Z_MINI_MENU_VER );
-	wp_enqueue_style( 'dashicons' );
-    wp_enqueue_script( 'jquery' );
+// Include/enqueue assets
+function z_mini_menu_enqueue_assets() {
+    wp_enqueue_style( 'z-mini-menu-css', Z_MINI_MENU_PLUGIN_URL . 'inc/style.css', array('dashicons'), Z_MINI_MENU_VER );
 	
-    wp_register_script( 'z-mini-menu-js', Z_MINI_MENU_PLUGIN_URL . 'inc/scripts.js', $deps = array('jquery'), $ver = Z_MINI_MENU_VER, $in_footer = true );
+    wp_register_script( 'z-mini-menu-js', Z_MINI_MENU_PLUGIN_URL . 'inc/scripts.js', array('jquery'), Z_MINI_MENU_VER, true );
     wp_enqueue_script( 'z-mini-menu-js' );
 
 }
-add_action( 'wp_enqueue_scripts', 'z_mini_menu_css_js');
+add_action( 'wp_enqueue_scripts', 'z_mini_menu_enqueue_assets');
 
 
-
+// Main function embedding the Mini Menu
 function embed_z_mini_menu() {
 
 	// only do stuff when
@@ -63,7 +62,7 @@ function embed_z_mini_menu() {
 	if( is_user_logged_in() && !is_admin() && !is_admin_bar_showing() ) {
 		
 		/*
-		 * Start the menu always with an edit post link (if we can), but let's first
+		 * Start the menu always with an edit post link (if we can), but let's 
 		 * 1. Make an array of extra menu items we can possibly show
 		 *
 		 */
@@ -83,32 +82,26 @@ function embed_z_mini_menu() {
 			}
 		}	
 		
-		
 		// Add new posts/pages/CPTs
 		if( isset($options['use_add_new']) && $options['use_add_new'] == 1 ) {
 			$html_add_new_items = array();
-			$post_args = array(
-				'public'	=> true,
-			);
+			// Get all public post types
+			$post_args = array( 'public'	=> true );
 			$output =  'objects';
-			// See: https://developer.wordpress.org/reference/functions/get_post_types/
-			$post_types = get_post_types( $post_args, $output, $operator = 'and' )	;
+			$operator = 'and';
+			$post_types = get_post_types( $post_args, $output,  $operator )	;
 
-			// z_print_r($post_types);
-			echo '<ul>';
 			foreach( $post_types as $post_type) {
 				// determine caps
 				$pto      = get_post_type_object( $post_type->name );						
 				$edit_posts_cap = $pto->cap->edit_posts;
-
+				// if current user can, add the new item link
 				if(current_user_can( $edit_posts_cap) ) {
 					$new_url = admin_url('post-new.php?post_type=' . $post_type->name);
 					$label = $post_type->labels->singular_name;
 					$html_add_new_items[] = '<li><a href="' . $new_url . '">' . $label . '</a></li>';
 				}
 			}
-			echo '</ul>';
-
 
 			if( !empty($html_add_new_items) ) {
 				$html_add_new = '<ul class="fold-out-sub">';
@@ -118,10 +111,8 @@ function embed_z_mini_menu() {
 				$html_add_new .= '</ul>';
 
 				$html_items[] = '<a class="has-children" href="javascript:void();" title="'.__( 'Add new', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-plus"><span class="sr-only">Add new</span></span>', 'textdomain' ).'</a>' . $html_add_new;
-				
 			}
 		}
-	
 		
 		// Menus
 		if( current_user_can( 'edit_theme_options' ) ) {
@@ -184,14 +175,13 @@ function embed_z_mini_menu() {
 			// begin menu
 			echo '<div id="admin-z-mini-menu" data-barba-prevent="all">';
 			
-			
 			// Add edit link
 			if( current_user_can( 'edit_posts' ) ) {
 				edit_post_link( __( '<span class="dashicons-before dashicons-edit-large"><span class="sr-only">Edit</span></span>', 'textdomain' ), '<div class="z_mini_menu-item">', '</div>', null, 'btn-edit-post-link' );
 			}	
 			
 			if( count($html_items) > 1 ) {
-				// Expand
+				// Make menu expandable
 				echo '<div class="z_mini_menu-item expand">';
 				echo '<a href="#z-mini-menu-expanded" id="expand-z-mini-menu" title="'.__( 'Expand mini menu', 'textdomain' ).'">'.__( '<span class="dashicons-before dashicons-ellipsis"><span class="sr-only">Expand mini menu</span></span>', 'textdomain' ).'</a>';
 				echo '</div>';
@@ -215,16 +205,15 @@ function embed_z_mini_menu() {
 	}	
 }
 
-
+// Add the Mini Menu after content or in the footer
 $options = get_option( 'z_mini_menu_plugin_options' );
-
 if( isset($options['use_after_main']) && $options['use_after_main'] == 1 ) {
 	add_action('after_main', 'embed_z_mini_menu');
 } else {
 	add_action('wp_footer', 'embed_z_mini_menu');
 }
 
-
+// Function to output the items
 function z_print_mini_menu_items( $html_items = array() ) {
 	foreach($html_items as $item) {
 		$has_submenu = '';
