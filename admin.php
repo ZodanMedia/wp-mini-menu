@@ -130,7 +130,7 @@ function z_mini_menu_setting_add_new() {
 	$use_users = (isset($options['use_add_new']) && $options['use_add_new'] == 1) ? 1 : 0;
 
     $html = '<input type="checkbox" id="use_add_new" name="z_mini_menu_plugin_options[use_add_new]" value="1"' . checked( 1, $use_users, false ) . '/>';
-    $html .= '<label for="use_add_new"> Include a link to adding new posts/pages/customs post types (depending on user capabilities)</label>';
+    $html .= '<label for="use_add_new"> Include a link to add new posts/pages/customs post types (depending on user capabilities)</label>';
 	
 	echo $html;
 }
