@@ -2,7 +2,7 @@
  * Plugin Name: Z Mini Admin Menu
  * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
  * Description: A mini menu to access most common admin items when te admin bar is not active
- * Version: 0.0.6
+ * Version: 0.0.7
  * Author: Zodan
  * Author URI: https://zodan.nl
  * License: GPL2
@@ -86,4 +86,16 @@
 	padding: 6px 16px 6px 12px !important;
 	font-size: 13px !important;;
 	line-height: 16px !important;;
+}
+#admin-z-mini-menu .dashicons-before.flipped::before {
+	transform: rotate(180deg);
+}
+#admin-z-mini-menu .z_mini_menu-item a .icon.image,
+#admin-z-mini-menu .z_mini_menu-item a .icon.svg {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 20px auto;
 }
