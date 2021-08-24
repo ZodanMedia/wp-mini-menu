@@ -29,7 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
 if ( !class_exists( 'zMiniMenu' ) ) {
 	
 	// Global variables
-	define('Z_MINI_MENU_VER', '0.0.6');
+	define('Z_MINI_MENU_VER', '0.0.7');
 	define('Z_MINI_MENU_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 	define('Z_MINI_MENU_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 
