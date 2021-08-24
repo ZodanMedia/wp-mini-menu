@@ -65,10 +65,10 @@ $settings_sections[0]['items'][8]['title'] = 'ACF';
 $settings_sections[0]['items'][8]['label'] = 'Include a link to Advanced Custom Fields';
 $settings_sections[0]['items'][8]['condition'] = array('if_class_exists', 'ACF');
 
-$settings_sections[0]['items'][8]['name'] = 'use_wpml';
-$settings_sections[0]['items'][8]['title'] = 'WPML';
-$settings_sections[0]['items'][8]['label'] = 'Include a link to the WPML dashboard';
-$settings_sections[0]['items'][8]['condition'] = array('if_function_exists', 'icl_object_id');
+$settings_sections[0]['items'][9]['name'] = 'use_wpml';
+$settings_sections[0]['items'][9]['title'] = 'WPML';
+$settings_sections[0]['items'][9]['label'] = 'Include a link to the WPML dashboard';
+$settings_sections[0]['items'][9]['condition'] = array('if_function_exists', 'icl_object_id');
 
 
 
