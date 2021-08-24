@@ -16,7 +16,8 @@ See https://speelwei.zodan.nl/wp-mini-menu/
 * Show a link to the WP Network (if available)
 * Show a link to New posts (for public post types)
 * Show a link to Menus, Widgets, Plugins and Users sections
-* Show a link to ACF and WooCommerce (if available)
+* Show a link to ACF, Yoast SEO, WooCommerce and WPML (if available)
+* Show custom links (to be added on the settings page)
 
 
 ## What needs to be done?
