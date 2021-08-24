@@ -1,0 +1,110 @@
+/**
+ * Plugin Name: Z Mini Admin Menu
+ * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
+ * Description: A mini menu to access most common admin items when te admin bar is not active
+ * Version: 0.0.7
+ * Author: Zodan
+ * Author URI: https://zodan.nl
+ * License: GPL2
+ */
+.z-mini-menu-ia-item {
+	background: #fff;
+	border-radius: 4px;
+	padding: 10px;
+	margin-bottom: 10px;
+	position: relative;
+}
+.z-mini-menu-ia-item-add-box {}
+.z-mini-menu-btn-add-ia i {
+	margin-top: 4px;
+}
+.z-mini-menu-btn-remove-ia {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	background: #f00;
+	color: #fff;
+	border-radius: 50%;
+	line-height: 17px;
+	font-size: 20px;
+	cursor: pointer;
+	font-weight: bold;
+	position: absolute;
+	right: -10px;
+	top: calc(50% - 10px);
+}
+.z-mini-menu-ia-item label {
+	display: inline-block;
+	width: 150px;
+}
+
+
+.picked-icon {
+    display: inline-block;
+	text-align: center;
+    font-size: 18px;
+    line-height: 30px;
+    min-height: 30px;
+    margin: 0;
+    margin-right: 10px;
+    padding: 0 6px;
+    color: #fff;
+    background: #000;
+    border-radius: 4px;
+}
+.dashicon-picker-container {
+    position: absolute;
+    width: 220px;
+    height: 252px;
+    font-size: 14px;
+    background-color: #fff;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.dashicon-picker-container ul {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+}
+.dashicon-picker-container ul .dashicons {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+}
+.dashicon-picker-container ul li {
+    display: inline-block;
+    margin: 5px;
+    float: left;
+}
+.dashicon-picker-container ul li a {
+    display: block;
+    text-decoration: none;
+    color: #373737;
+    padding: 5px 5px;
+    border: 1px solid #dfdfdf;
+}
+.dashicon-picker-container ul li a:hover {
+    border-color: #999;
+    background: #efefef;
+}
+.dashicon-picker-control {
+    height: 32px;
+}
+.dashicon-picker-control a {
+    padding: 5px;
+    text-decoration: none;
+    line-height: 32px;
+    width: 25px;
+}
+.dashicon-picker-control a span {
+    display: inline;
+    vertical-align: middle;
+}
+.dashicon-picker-control input {
+    font-size: 12px;
+    width: 140px;
+}
