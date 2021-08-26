@@ -7,7 +7,7 @@
  * Requires at least: 5.5
  * Tested up to: 5.7.1
  * Description: A mini menu to access most common admin items when te admin bar is not active
- * Version: 0.0.7
+ * Version: 1.0.0
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-menu

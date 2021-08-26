@@ -5,7 +5,7 @@
  *
  * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
  *
- * Version: 0.0.7
+ * Version: 1.0.0
  * Author: Zodan
  * Author URI: https://zodan.nl
  * License: GPL2
