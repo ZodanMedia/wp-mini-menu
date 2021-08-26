@@ -23,6 +23,8 @@ See https://speelwei.zodan.nl/wp-mini-menu/
 ## What needs to be done?
 
 * Add more items/support for major plugins
+* Order items
+* Add roles per menu item
 
 
 ## WordPress version support
