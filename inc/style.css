@@ -8,94 +8,94 @@
  * License: GPL2
  */
 #admin-z-mini-menu {
-	position: fixed;
-	z-index: 9999;
-	top: 150px;
-	left: 0;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-content: center;
-	align-items: center;
-	width: 40px;
-	height: auto;
-	border-radius: 0px 5px 5px 0px;
-	background: #000;
+    position: fixed;
+    z-index: 9999;
+    top: 150px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    width: 40px;
+    height: auto;
+    border-radius: 0px 5px 5px 0px;
+    background: #000;
 }
 #admin-z-mini-menu .z_mini_menu-item-holder {
-	display: none;	
+    display: none;
 }
 #admin-z-mini-menu.open .z_mini_menu-item-holder {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-content: center;
-	align-items: center;
-	width: 40px;
-	height: auto;	
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    width: 40px;
+    height: auto;
 }
 #admin-z-mini-menu .z_mini_menu-item {
-	width: 40px;
-	height: 40px;
-	background: transparent;
-	display: flex;
-	justify-content: center;
-	align-content: center;
-	align-items: center;
-	position: relative;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    position: relative;
 }
 #admin-z-mini-menu .z_mini_menu-item a {
-	display: block;
-	font-size: 16px;
-	line-height: 16px;
-	
-	text-decoration: none !important;
-	color: #ffffff90;
+    display: block;
+    font-size: 16px;
+    line-height: 16px;
+    text-decoration: none !important;
+    color: #ffffff90;
 }
 #admin-z-mini-menu .z_mini_menu-item a:hover {
-	text-decoration: none !important;
-	color: #fff;
+    text-decoration: none !important;
+    color: #fff;
 }
 #admin-z-mini-menu .z_mini_menu-item.collapse,
 #admin-z-mini-menu.open .z_mini_menu-item.expand {
-	display: none;
+    display: none;
 }
 #admin-z-mini-menu.open .z_mini_menu-item.collapse {
-	display: flex;
+    display: flex;
 }
 #admin-z-mini-menu ul.fold-out-sub {
-	list-style: none;
-	padding-left : 0;
-	position: absolute;
-	background: #000;
-	left: 40px;
-	top: 0;
-	border-radius: 0 5px 5px 0;
-	display: none;
+    list-style: none;
+    padding-left: 0;
+    position: absolute;
+    background: #000;
+    left: 40px;
+    top: 0;
+    border-radius: 0 5px 5px 0;
+    display: none;
 }
 #admin-z-mini-menu .has-submenu:hover ul.fold-out-sub {
-	display: block;
+    display: block;
 }
 #admin-z-mini-menu ul.fold-out-sub li {
-	list-style: none;
-	margin: 0 !important;
-	padding: 0 !important;
-
+    list-style: none;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 #admin-z-mini-menu ul.fold-out-sub li a {
-	padding: 6px 16px 6px 12px !important;
-	font-size: 13px !important;;
-	line-height: 16px !important;;
+    padding: 6px 16px 6px 12px !important;
+    font-size: 13px !important;
+    ;
+    line-height: 16px !important;
+    ;
 }
 #admin-z-mini-menu .dashicons-before.flipped::before {
-	transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 #admin-z-mini-menu .z_mini_menu-item a .icon.image,
 #admin-z-mini-menu .z_mini_menu-item a .icon.svg {
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 20px auto;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px auto;
 }
