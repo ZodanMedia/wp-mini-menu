@@ -25,6 +25,7 @@ See https://speelwei.zodan.nl/wp-mini-menu/
 * Add more items/support for major plugins
 * Order items
 * Add roles per menu item
+* Finish making stuff translatable
 
 
 ## WordPress version support
