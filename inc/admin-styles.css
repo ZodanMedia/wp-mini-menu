@@ -4,7 +4,6 @@
  * 
  * Author: Zodan
  * Author URI: https://zodan.nl
- * License: GPL2
  */
 .z-mini-menu-ia-item {
     background: #fff;
@@ -104,4 +103,17 @@
 .dashicon-picker-control input {
     font-size: 12px;
     width: 140px;
+}
+.z-mini-menu-sort-item {
+	background: #fff;
+	border-radius: 5px;
+	margin-bottom: 8px;
+	padding: 10px 10px 10px 20px;
+	max-width: 280px;
+	font-weight: 600;
+	cursor: move;
+}
+.z-mini-menu-sort-item .handle {
+    float: right;
+    opacity: .4;
 }

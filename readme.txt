@@ -1,15 +1,16 @@
 === Z Mini Admin Menu ===
 Contributors: martenmoolenaar
-Donate link: https://www.buymeacoffee.com/mrtnm
+Donate link: https://www.buymeacoffee.com/zodan
 Tags: admin menu, tiny menu, mini menu, cleanup, development
+Description: A frontpage mini menu to access most common admin items when te admin bar is not active
 Requires at least: 5.5
 Tested up to: 5.8
-Stable tag: 1.0
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 
-A mini menu to access most common admin items when te admin bar is not active
+A front-end mini menu to access most common admin items when te admin bar is not active. Super comfy when you don't want the big default admin bar, but just a tiny button when you are developing (or maintaining) a website.
 
 
 == Description ==
@@ -52,7 +53,8 @@ This plugin is under active development. Any feature requests are welcome at [pl
 1. On the Plugins page in WordPress you will see a 'settings' link below the plugin name;
 2. Tick the boxes of the items you would like to show in the menu;
 3. Optionally, you can add your own links to the menu (make shure you type the full URI)
-4. Save your settings and you’re done!
+4. Sort the menu items the way you like it
+5. Save your settings and you’re done!
 
 
 
@@ -67,14 +69,20 @@ If you think a major plugin is missing by default, send us an email at [plugins@
 = Do you have plans to improve the plugin =
 
 Yes. We currently have on our roadmap:
-* Possibility to order menu items
 * Add roles per menu item
-* Finish making stuff translatable
+* Adding translations
 
 
 
 
 == Changelog ==
+
+= 1.0.2 =
+* Added sorting menu items
+* Some code revisions in the way we output data
+
+= 1.0.1 =
+* Added custom configurable items
 
 = 1.0 =
 * Very first version of this plugin

@@ -4,14 +4,13 @@
  * 
  * Author: Zodan
  * Author URI: https://zodan.nl
- * License: GPL2
  */
 (function ($) {
     'use strict';
     // Add Color Picker  in admin to all inputs that have 'z-mini-menu-color-field' class
     $('.z-mini-menu-color-field').wpColorPicker();
 
-    // dynamically add custom menu items
+    // Dynamically add custom menu items
     var ia_next_row;
     ia_next_row = parseInt($('.z-mini-menu-btn-add-ia').attr('data-last')) + 1;
 
@@ -26,7 +25,7 @@
         ia_next_row++;
     });
 
-    // remove custom menu items
+    // Remove custom menu items
     $(document).on('click', '.z-mini-menu-btn-remove-ia', function (e) {
         e.preventDefault();
         $(this).parent().remove();
@@ -451,5 +450,17 @@
     $(function () {
         $('.dashicons-picker').dashiconsPicker();
     });
+	
+	$('#mini-menu-sorts').sortable({
+		'items' : '.z-mini-menu-sort-item',
+		'opacity' : 0.6,
+		'cursor' : 'move',
+		axis : 'y',
+		update: function(e, ui) {
+			$(this).find('.z-mini-menu-sort-item').each(function() {
+				$(this).find('input').attr('name', 'z_mini_menu_plugin_order['+ $(this).index() +']');
+			});
+		}
+	});
 
 }(jQuery));

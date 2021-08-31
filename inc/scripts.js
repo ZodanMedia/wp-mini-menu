@@ -4,7 +4,6 @@
  * 
  * Author: Zodan
  * Author URI: https://zodan.nl
- * License: GPL2
  */
 (function ($) {
     'use strict';
