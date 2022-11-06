@@ -47,11 +47,15 @@
     font-size: 16px;
     line-height: 16px;
     text-decoration: none !important;
+	transition: all 250ms ease-in-out;
     color: #ffffff90;
+	color: #fff;
+	opacity: 0.65;
 }
 #admin-z-mini-menu .z_mini_menu-item a:hover {
     text-decoration: none !important;
     color: #fff;
+	opacity: 1;
 }
 #admin-z-mini-menu .z_mini_menu-item.collapse,
 #admin-z-mini-menu.open .z_mini_menu-item.expand {
@@ -96,4 +100,16 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: 20px auto;
+}
+#admin-z-mini-menu .sr-only {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
 }

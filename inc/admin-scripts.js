@@ -17,10 +17,13 @@
     $('.z-mini-menu-btn-add-ia').click(function (e) {
         e.preventDefault();
 
-        var html = '<div class="z-mini-menu-ia-item" data-id="' + ia_next_row + '"><p><label>Menu name</label><input class="regular-text" type="text" id="use_custom[' + ia_next_row + '][name]" name="z_mini_menu_plugin_options[use_custom][' + ia_next_row + '][name]"></p><p><label>Menu url</label><input class="regular-text" type="text" id="use_custom[' + ia_next_row + '][url]" name="z_mini_menu_plugin_options[use_custom][' + ia_next_row + '][url]"></p><p><label>Menu icon</label><span class="input-box"><span id="use_custom[' + ia_next_row + '][icon]_icon" class="picked-icon dashicons dashicons-heart"></span><input class="regular-text" type="hidden" id="use_custom[' + ia_next_row + '][icon]" name="z_mini_menu_plugin_options[use_custom][' + ia_next_row + '][icon]" value="dashicons-heart"><input type="button" data-target="#use_custom\\[' + ia_next_row + '\\]\\[icon\\]" data-icon="#use_custom\\[' + ia_next_row + '\\]\\[icon\\]_icon" class="button dashicons-picker" value="..."></span></p><div class="z-mini-menu-btn-remove-ia">-</div></div>';
+        var html = '<div class="z-mini-menu-ia-item" data-id="' + ia_next_row + '"><p><label>Menu name</label><input class="regular-text" type="text" id="use_custom[' + ia_next_row + '][name]" name="z_mini_menu_plugin_options[use_custom][' + ia_next_row + '][name]"></p><p><label>Menu url</label><input class="regular-text" type="text" id="use_custom[' + ia_next_row + '][url]" name="z_mini_menu_plugin_options[use_custom][' + ia_next_row + '][url]"></p><p><label>Menu icon</label><span class="input-box"><span id="use_custom[' + ia_next_row + '][icon]_icon" class="picked-icon dashicons dashicons-heart"></span><input class="regular-text" type="hidden" id="use_custom[' + ia_next_row + '][icon]" name="z_mini_menu_plugin_options[use_custom][' + ia_next_row + '][icon]" value="dashicons-heart"><input type="button" data-target="#use_custom\\[' + ia_next_row + '\\]\\[icon\\]" data-icon="#use_custom\\[' + ia_next_row + '\\]\\[icon\\]_icon" class="button dashicons-picker" value="..."></span></p><p><label>Restricted to</label><select class="role-select" name="z_mini_menu_plugin_options[use_custom][' + ia_next_row + '][role]"></select></p><div class="z-mini-menu-btn-remove-ia">-</div></div>';
+		
         $(this).before(html);
 
         $('.z-mini-menu-ia-item[data-id=' + ia_next_row + '] .dashicons-picker').dashiconsPicker();
+		var role_select_options = $('#z-mini-menu-dummy-options').html();
+        $('.z-mini-menu-ia-item[data-id=' + ia_next_row + '] .role-select').html(role_select_options);
 
         ia_next_row++;
     });

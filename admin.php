@@ -66,7 +66,10 @@ $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'title' ] = __( 'Woocommer
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'label' ] = __('Include the Woocommerce products link', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'condition' ] = array( 'if_class_exists', 'woocommerce' );
 
-
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'name' ] = 'use_fforms';
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'title' ] = __('FluentForms', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'label' ] = __('Include a link to FluentForms', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'condition' ] = array( 'if_function_exists', 'wpFluentForm' );
 
 
 
@@ -85,6 +88,9 @@ $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 9 ][ 'name' ] = 'use_wpml';
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 9 ][ 'title' ] = __('WPML', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 9 ][ 'label' ] = __('Include a link to the WPML dashboard', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 9 ][ 'condition' ] = array( 'if_function_exists', 'icl_object_id' );
+
+
+
 
 
 $z_mini_menu_settings_sections[ 1 ][ 'name' ] = 'custom_settings';
@@ -110,8 +116,13 @@ $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 0 ][ 'condition' ] = array( 'use
 
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 1 ][ 'name' ] = 'use_after_main';
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 1 ][ 'title' ] = __('Output location', 'z-mini-admin-menu');
-$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 1 ][ 'label' ] = __('Output after main content.<br />You might want to check this if you are using a page loader like BarbaJs.<br />If <em>unchecked</em>, the menu will be placed at the end of the &lt;body&gt; (recommended).', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 1 ][ 'label' ] = __('Output after main content.<br />You might want to check this if you are using a page loader like BarbaJs. Note: you need to include a "after_main" hook in your theme.<br />If <em>unchecked</em>, the menu will be placed in the footer (recommended).', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 1 ][ 'condition' ] = array( '' );
+
+$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 2 ][ 'name' ] = 'use_roles';
+$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 2 ][ 'title' ] = __('Permitted roles', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 2 ][ 'label' ] = __('', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 2 ][ 'condition' ] = array( 'use_roles_permit' );
 
 
 
@@ -141,7 +152,7 @@ if ( !function_exists( 'z_mini_menu_register_settings' ) ) {
 			'show_in_rest' => false
 		);
 		register_setting( 'z_mini_menu_plugin_order', 'z_mini_menu_plugin_order', $order_args);
-
+		
 		
         // loop through all settings
         foreach ( $z_mini_menu_settings_sections as $section ) {
@@ -184,6 +195,18 @@ if ( !function_exists( 'z_mini_menu_register_settings' ) ) {
                         )
                     );
 
+                } elseif ( $item[ 'condition' ][ 0 ] == 'use_roles_permit' ) {
+                    add_settings_field(
+                        'z_mini_menu_setting_' . $item[ 'name' ],
+                        $item[ 'title' ],
+                        'z_mini_menu_use_roles_item_display',
+                        'z_mini_menu_plugin',
+                        $section[ 'name' ],
+                        array(
+                            'item' => $item
+                        )
+                    );
+
                 } else {
                     add_settings_field(
                         'z_mini_menu_setting_' . $item[ 'name' ],
@@ -198,11 +221,9 @@ if ( !function_exists( 'z_mini_menu_register_settings' ) ) {
                 }
             }
         }
-		
+	
 		// add order settings
 		add_settings_section( 'order_items', 'Ordering of existing menu-items', 'z_mini_menu_ordering_section_text', 'z_mini_menu_plugin_order');
-		
-		
 		
 
     }
@@ -307,7 +328,7 @@ if ( !function_exists( 'z_mini_menu_render_order_items_page' ) ) {
 					}
 					// loop through remaining options
 					foreach($options as $key => $option) {
-						if( $key == 'bg_color' || $key == 'use_after_main' ) {
+						if( $key == 'bg_color' || $key == 'use_after_main' || $key == 'use_roles') {
 							continue;
 						}
 						if( $key == 'use_custom' ) {
@@ -354,6 +375,8 @@ if ( !function_exists( 'z_mini_menu_render_order_items_page' ) ) {
 <?php
 	}
 }
+
+
 
 
 
@@ -417,6 +440,9 @@ function z_mini_menu_ia_item_display( $args ) {
                 	echo esc_attr( $options[ $name ][ $item_key ][ 'icon' ] );
             	} ?>"/><input type="button" data-target="#<?php echo esc_attr($name); ?>\[<?php echo esc_attr($item_key); ?>\]\[icon\]" data-icon="#<?php echo esc_attr($name); ?>\[<?php echo esc_attr($item_key); ?>\]\[icon\]_icon" class="button dashicons-picker" value="..." /></span></p>
 				
+			
+				<p><label><?php _e('Restricted to', 'z-mini-admin-menu'); ?></label><select name="z_mini_menu_plugin_options[<?php echo esc_attr($name); ?>][<?php echo esc_attr($item_key); ?>][role]"><?php print_roles_dropdown_options( esc_attr( $options[ $name ][ $item_key ][ 'role' ]) ); ?></select></p>
+
 				<div class="z-mini-menu-btn-remove-ia">-</div>
            </div>
 		<?php
@@ -424,7 +450,9 @@ function z_mini_menu_ia_item_display( $args ) {
         $last_key = max( array_keys( $options[ $name ] ) );
     }
 
-    ?><div class="z-mini-menu-ia-item-add-box"><a href="javascript:;" class="z-mini-menu-btn-add-ia button button-primary" data-last="<?php echo esc_attr($last_key); ?>"><i class="dashicons dashicons-plus-alt"></i> <?php _e( 'Add a custom menu item', 'z-mini-admin-menu' ); ?></a></div><?php
+    ?><div class="z-mini-menu-ia-item-add-box"><a href="javascript:;" class="z-mini-menu-btn-add-ia button button-primary" data-last="<?php echo esc_attr($last_key); ?>"><i class="dashicons dashicons-plus-alt"></i> <?php _e( 'Add a custom menu item', 'z-mini-admin-menu' ); ?></a></div>
+
+	<div class="z-mini-menu-admin-hidden" style="display:none;"><select id="z-mini-menu-dummy-options"><?php print_roles_dropdown_options(); ?></select></div><?php
 
 }
 
@@ -446,11 +474,35 @@ function z_mini_menu_color_picker_item_display( $args ) {
     echo '"/>';
 
 }
+/*
+ * 4.d. User roles permit options settings field
+ *
+ *
+ */
+function z_mini_menu_use_roles_item_display( $args ) {
+    $name = $args[ 'item' ][ 'name' ];
 
+    $options = get_option( 'z_mini_menu_plugin_options' );
+	
+	if( empty($options[ $name ]) ) {
+		$options[ $name ] = array (
+            0 => 'administrator'
+        );
+	}
+	
+	global $wp_roles;
+	$all_roles = $wp_roles->roles;
+
+	foreach ($all_roles as $role => $details) {
+		$selected_html = '';		
+		if( in_array($role, $options[ $name ]) ) { $selected_html = ' checked="checked"'; };    
+		echo '<label><input type="checkbox" name="z_mini_menu_plugin_options[' . esc_attr($name) . '][]" value="'.esc_attr($role).'"'.$selected_html.'/>'. translate_user_role($details['name']) .'</label><br />';
+	}
+}
 
 
 /*
- * 4.d. Text sections
+ * 4.e. Text sections
  *
  *
  */
@@ -465,7 +517,6 @@ function z_mini_menu_other_section_text() { /* Other settings text */ }
 function z_mini_menu_ordering_section_text() { /* Order section text */
     echo '<p>Here you can sort the existing menu items.</p>';
 }
-
 
 
 
@@ -503,6 +554,29 @@ function z_mini_menu_esc_html_allowed( $str ) {
 }
 
 
+
+
+
+
+/*
+ * Print select dropdown for roles
+ *
+ *
+ *
+ */
+function print_roles_dropdown_options( $selected = 'administrator') {
+    global $wp_roles;
+
+    $all_roles = $wp_roles->roles;
+	
+	$options_html = '';
+    foreach ($all_roles as $role => $details) {
+		$selected_html = '';
+		if( $role == $selected) { $selected_html = ' selected="selected"'; };
+		$options_html .= '<option value="'.esc_attr($role).'"'.$selected_html.'>'. translate_user_role($details['name']) .'</option>';
+    }
+	echo $options_html;
+}
 
 
 
