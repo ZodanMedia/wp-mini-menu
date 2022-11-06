@@ -1,11 +1,11 @@
 === Z Mini Admin Menu ===
 Contributors: martenmoolenaar
 Donate link: https://www.buymeacoffee.com/zodan
-Tags: admin menu, tiny menu, mini menu, cleanup, development
+Tags: admin menu, tiny menu, mini menu, cleanup, development, elementor
 Description: A frontpage mini menu to access most common admin items when te admin bar is not active
 Requires at least: 5.5
-Tested up to: 5.8
-Stable tag: 1.0.2
+Tested up to: 6.0.2
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -20,12 +20,13 @@ In most of our custom WordPress themes, we like to view our pages without the ad
 = What does it do? =
 
 * Show the WordPress "Edit post" action
+* Show an "Edit with Elementor" action (for those who care)
 * Show a link to the Dashboard
 * Show a link to the WP Network (if available)
 * Show a link to New posts (for public post types)
 * Show a link to Menus, Widgets, Plugins and Users sections
-* Show a link to ACF, Yoast SEO, WooCommerce and WPML (if available)
-* Show custom links (to be added on the settings page)
+* Show a link to ACF, Yoast SEO, WooCommerce, FluentForms and WPML (if available)
+* Show role-restricted custom links (to be added on the settings page)
 
 This plugin is under active development. Any feature requests are welcome at [plugins@zodan.nl](plugins@zodan.nl)!
 
@@ -40,7 +41,7 @@ This plugin is under active development. Any feature requests are welcome at [pl
 1. Activate the plugin from your Plugins page;
 1. Go to ‘after activation’ below.
 
-= Install manually = 
+= Install manually =
 
 1. Unzip the Mini Admin Menu zip file
 2. Upload the unzipped folder to the /wp-content/plugins/ directory;
@@ -62,20 +63,35 @@ This plugin is under active development. Any feature requests are welcome at [pl
 
 = Which plugins do you support by default? =
 
-Right now, quite arbitrarily, we support WPML, ACF, Yoast SEO and WooCommerce. Just because these are plugins we access a lot during development.
+Right now, quite arbitrarily, we support WPML, ACF, FluentForms, Yoast SEO and WooCommerce. Just because these are plugins we access a lot during development.
 But you can add your own through the settings page.
 If you think a major plugin is missing by default, send us an email at [plugins@zodan.nl](plugins@zodan.nl).
 
 = Do you have plans to improve the plugin =
 
 Yes. We currently have on our roadmap:
-* Add roles per menu item
 * Adding translations
 
 
 
 
 == Changelog ==
+
+= 1.0.6 =
+* Fixed a WP Network bug
+* Added role restriction for general use of the plugin
+
+= 1.0.5 =
+* Added role restriction for custom items
+* More specific capabilities for built-in items
+* Added FluentForms support
+
+= 1.0.4 =
+* Fixed the show after content bug
+* Fixed Elementor missing id bug
+
+= 1.0.3 =
+* Added editing with Elementor
 
 = 1.0.2 =
 * Added sorting menu items
