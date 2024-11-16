@@ -4,8 +4,8 @@ Donate link: https://www.buymeacoffee.com/zodan
 Tags: admin menu, tiny menu, mini menu, cleanup, development, elementor
 Description: A frontpage mini menu to access most common admin items when te admin bar is not active
 Requires at least: 5.5
-Tested up to: 6.0.2
-Stable tag: 1.0.6
+Tested up to: 6.7
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,11 +71,37 @@ If you think a major plugin is missing by default, send us an email at [plugins@
 
 Yes. We currently have on our roadmap:
 * Adding translations
+* Set the option to use the Mini Admin Menu per user profile
 
 
 
 
 == Changelog ==
+
+= 2.0 =
+* Refactored version of the plugin
+
+= 1.0.13 =
+* Fixed plugin.php include bug
+
+= 1.0.12 =
+* Fixed tiny stupid mistake
+
+= 1.0.11 =
+* Added configuration when to show the Mini Admin Menu
+* Fixed debug warning message
+
+= 1.0.10 =
+* Update notification badges added
+
+= 1.0.9 =
+* Bugfix edit post url (sorry for the typo)
+
+= 1.0.8 =
+* Small changes to the default capabilities
+
+= 1.0.7 =
+* Changed the output method to let the Mini Admin Menu live in the shadow DOM
 
 = 1.0.6 =
 * Fixed a WP Network bug

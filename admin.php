@@ -109,6 +109,11 @@ $z_mini_menu_settings_sections[ 2 ][ 'title' ] = __('Other settings', 'z-mini-ad
 $z_mini_menu_settings_sections[ 2 ][ 'callback' ] = 'z_mini_menu_other_section_text';
 $z_mini_menu_settings_sections[ 2 ][ 'items' ] = array();
 
+$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 3 ][ 'name' ] = 'when_to_show';
+$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 3 ][ 'title' ] = __('Toolbar replacement', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 3 ][ 'label' ] = __('Do not replace the admin bar.<br />When unchecked (this is the default and recommended), the Mini Admin Menu will replace the standard admin bar.<br />When checked, the standard WP admin bar will show when the Toolbar option "Show Toolbar when viewing site" is checked on the user profile page.', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 3 ][ 'condition' ] = array( '' );
+
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 0 ][ 'name' ] = 'bg_color';
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 0 ][ 'title' ] = __('Background color', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 0 ][ 'label' ] = '';
@@ -125,6 +130,10 @@ $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 2 ][ 'label' ] = __('', 'z-mini-
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 2 ][ 'condition' ] = array( 'use_roles_permit' );
 
 
+if ( !defined( 'Z_MINI_MENU_SETTINGS_SECTIONS' ) ) {
+    define( 'Z_MINI_MENU_SETTINGS_SECTIONS', $z_mini_menu_settings_sections );
+	
+}
 
 
 /*
@@ -135,7 +144,6 @@ $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 2 ][ 'condition' ] = array( 'use
 if ( !function_exists( 'z_mini_menu_register_settings' ) ) {
 
     function z_mini_menu_register_settings() {
-        global $z_mini_menu_settings_sections;
 		
 		$settings_args = array(
 			'type' => 'array',
@@ -155,7 +163,7 @@ if ( !function_exists( 'z_mini_menu_register_settings' ) ) {
 		
 		
         // loop through all settings
-        foreach ( $z_mini_menu_settings_sections as $section ) {
+        foreach ( Z_MINI_MENU_SETTINGS_SECTIONS as $section ) {
             // add section
             add_settings_section( $section[ 'name' ], $section[ 'title' ], $section[ 'callback' ], 'z_mini_menu_plugin', $section );
 
@@ -291,7 +299,6 @@ if ( !function_exists( 'z_mini_menu_render_settings_page' ) ) {
 if ( !function_exists( 'z_mini_menu_render_order_items_page' ) ) {
 
     function z_mini_menu_render_order_items_page() {
-		global $z_mini_menu_settings_sections;
 ?>
 		<div class="wrap">
 			<h1><?php _e('Wordpress Mini Menu settings', 'z-mini-admin-menu'); ?></h1>
@@ -328,7 +335,7 @@ if ( !function_exists( 'z_mini_menu_render_order_items_page' ) ) {
 					}
 					// loop through remaining options
 					foreach($options as $key => $option) {
-						if( $key == 'bg_color' || $key == 'use_after_main' || $key == 'use_roles') {
+						if( $key == 'bg_color' || $key == 'use_after_main' || $key == 'use_roles' || $key == 'when_to_show') {
 							continue;
 						}
 						if( $key == 'use_custom' ) {
@@ -344,7 +351,7 @@ if ( !function_exists( 'z_mini_menu_render_order_items_page' ) ) {
 					$options = get_option( 'z_mini_menu_plugin_options' ); // init again
 					foreach($ordered_options as $key => $item) {
 						if( !is_numeric($item)) {
-							foreach( $z_mini_menu_settings_sections[ 0 ][ 'items' ] as $settings_option ) {
+							foreach( Z_MINI_MENU_SETTINGS_SECTIONS[ 0 ][ 'items' ] as $settings_option ) {
 								if( $settings_option['name'] == $item ) {
 									$title = $settings_option['title'];
 									$name = $item;
@@ -441,7 +448,7 @@ function z_mini_menu_ia_item_display( $args ) {
             	} ?>"/><input type="button" data-target="#<?php echo esc_attr($name); ?>\[<?php echo esc_attr($item_key); ?>\]\[icon\]" data-icon="#<?php echo esc_attr($name); ?>\[<?php echo esc_attr($item_key); ?>\]\[icon\]_icon" class="button dashicons-picker" value="..." /></span></p>
 				
 			
-				<p><label><?php _e('Restricted to', 'z-mini-admin-menu'); ?></label><select name="z_mini_menu_plugin_options[<?php echo esc_attr($name); ?>][<?php echo esc_attr($item_key); ?>][role]"><?php print_roles_dropdown_options( esc_attr( $options[ $name ][ $item_key ][ 'role' ]) ); ?></select></p>
+				<p><label><?php _e('Restricted to', 'z-mini-admin-menu'); ?></label><select name="z_mini_menu_plugin_options[<?php echo esc_attr($name); ?>][<?php echo esc_attr($item_key); ?>][role]"><?php z_mini_menu_print_roles_dropdown_options( esc_attr( $options[ $name ][ $item_key ][ 'role' ]) ); ?></select></p>
 
 				<div class="z-mini-menu-btn-remove-ia">-</div>
            </div>
@@ -452,7 +459,7 @@ function z_mini_menu_ia_item_display( $args ) {
 
     ?><div class="z-mini-menu-ia-item-add-box"><a href="javascript:;" class="z-mini-menu-btn-add-ia button button-primary" data-last="<?php echo esc_attr($last_key); ?>"><i class="dashicons dashicons-plus-alt"></i> <?php _e( 'Add a custom menu item', 'z-mini-admin-menu' ); ?></a></div>
 
-	<div class="z-mini-menu-admin-hidden" style="display:none;"><select id="z-mini-menu-dummy-options"><?php print_roles_dropdown_options(); ?></select></div><?php
+	<div class="z-mini-menu-admin-hidden" style="display:none;"><select id="z-mini-menu-dummy-options"><?php z_mini_menu_print_roles_dropdown_options(); ?></select></div><?php
 
 }
 
@@ -562,9 +569,8 @@ function z_mini_menu_esc_html_allowed( $str ) {
  * Print select dropdown for roles
  *
  *
- *
  */
-function print_roles_dropdown_options( $selected = 'administrator') {
+function z_mini_menu_print_roles_dropdown_options( $selected = 'administrator') {
     global $wp_roles;
 
     $all_roles = $wp_roles->roles;
@@ -584,13 +590,13 @@ function print_roles_dropdown_options( $selected = 'administrator') {
  * Enqueue scripts and styles
  *
  *
- *
  */
 function z_mini_menu_add_admin_scripts( $hook ) {
     if ( is_admin() ) {
-        $admin_css = Z_MINI_ADMIN_MENU_PLUGIN_URL . 'inc/admin-styles.css';
+		$plugin_url = plugins_url( '/', __FILE__ );
+        $admin_css = $plugin_url . 'assets/admin-styles.css';
         wp_enqueue_style( 'z-mini-menu-admin-styles', esc_url($admin_css), array( 'dashicons', 'wp-color-picker' ), '1.0' );
-        $admin_scripts = Z_MINI_ADMIN_MENU_PLUGIN_URL . 'inc/admin-scripts.js';
+        $admin_scripts = $plugin_url . 'assets/admin-scripts.js';
 		wp_enqueue_script( 'z-mini-admin-scripts', esc_url($admin_scripts), array( 'wp-color-picker', 'jquery-ui-sortable' ), false, true );
     }
 }

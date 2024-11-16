@@ -5,9 +5,9 @@
  * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
  * Tags: admin menu, tiny menu, mini menu, cleanup, development, elementor
  * Requires at least: 5.5
- * Tested up to: 6.0.2
+ * Tested up to: 6.7
  * Description: A frontpage mini menu to access most common admin items when te admin bar is not active
- * Version: 1.0.6
+ * Version: 2.0
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-admin-menu
@@ -25,396 +25,511 @@ if ( !defined( 'WPINC' ) ) {
 
 
 
-if ( !class_exists( 'zMiniMenu' ) ) {
-
-    // Global variables
-    define( 'Z_MINI_ADMIN_MENU_VER', '1.0.1' );
-    define( 'Z_MINI_ADMIN_MENU_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-    define( 'Z_MINI_ADMIN_MENU_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-
-    $z_mini_menu_defaults = array(
-		'use_roles' => array (
-            0 => 'administrator'
-        )	
-	);
-    define( 'Z_MINI_ADMIN_MENU_DEFAULTS', $z_mini_menu_defaults );
 
 
-	// predefines settings
-	$z_mini_menu_predefined_items = array();
-	$z_mini_menu_predefined_items['use_dashboard'][ 'name' ] = __( 'Visit dashboard', 'z-mini-admin-menu' );
-	$z_mini_menu_predefined_items['use_dashboard'][ 'icon' ] = 'dashicons-dashboard';
-	$z_mini_menu_predefined_items['use_dashboard'][ 'url' ] = admin_url( 'index.php' );
-	$z_mini_menu_predefined_items['use_dashboard'][ 'capability' ] = 'manage_options';
-	$z_mini_menu_predefined_items['use_dashboard'][ 'condition' ] = array( '' );
 
-	$z_mini_menu_predefined_items['use_multisite'][ 'name' ] = __('Manage the network', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_multisite'][ 'icon' ] = 'dashicons-admin-multisite';
-	$z_mini_menu_predefined_items['use_multisite'][ 'url' ] = admin_url( 'network/sites.php' );
-	$z_mini_menu_predefined_items['use_multisite'][ 'capability' ] = 'manage_network';
-	$z_mini_menu_predefined_items['use_multisite'][ 'condition' ] = array( 'if_is_multisite' );
+/**
+ * Start: create an instance,
+ *        initialize the plugin setup
+ * 
+ */
+add_action(
+	'plugins_loaded',
+	array ( zMiniMenu::get_instance(), 'plugin_setup' )
+);
 
-	$z_mini_menu_predefined_items['use_add_new'][ 'name' ] = __('Add new', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_add_new'][ 'icon' ] = 'dashicons-plus';
-	$z_mini_menu_predefined_items['use_add_new'][ 'url' ] = 'javascript:void()';
-	$z_mini_menu_predefined_items['use_add_new'][ 'capability' ] = false;
-	$z_mini_menu_predefined_items['use_add_new'][ 'condition' ] = array( '' );
-	$z_mini_menu_predefined_items['use_add_new'][ 'has_submenu_items' ] = true;
 
-	$z_mini_menu_predefined_items['use_menus'][ 'name' ] = __('Manage menus', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_menus'][ 'icon' ] = 'dashicons-menu';
-	$z_mini_menu_predefined_items['use_menus'][ 'url' ] = admin_url( 'nav-menus.php' );
-	$z_mini_menu_predefined_items['use_menus'][ 'capability' ] = 'edit_theme_options';
-	$z_mini_menu_predefined_items['use_menus'][ 'condition' ] = array( '' );
 
-	$z_mini_menu_predefined_items['use_widgets'][ 'name' ] = __('Manage widgets', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_widgets'][ 'icon' ] = 'dashicons-index-card';
-	$z_mini_menu_predefined_items['use_widgets'][ 'url' ] = admin_url( 'widgets.php' );
-	$z_mini_menu_predefined_items['use_widgets'][ 'capability' ] = 'edit_theme_options';
-	$z_mini_menu_predefined_items['use_widgets'][ 'condition' ] = array( '' );
 
-	$z_mini_menu_predefined_items['use_plugins'][ 'name' ] = __('Manage plugins', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_plugins'][ 'icon' ] = 'dashicons-admin-plugins';
-	$z_mini_menu_predefined_items['use_plugins'][ 'url' ] = admin_url( 'plugins.php' );
-	$z_mini_menu_predefined_items['use_plugins'][ 'capability' ] = 'activate_plugins';
-	$z_mini_menu_predefined_items['use_plugins'][ 'condition' ] = array( '' );
 
-	$z_mini_menu_predefined_items['use_users'][ 'name' ] = __('Manage users', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_users'][ 'icon' ] = 'dashicons-admin-users';
-	$z_mini_menu_predefined_items['use_users'][ 'url' ] = admin_url( 'users.php' );
-	$z_mini_menu_predefined_items['use_users'][ 'capability' ] = 'edit_users';
-	$z_mini_menu_predefined_items['use_users'][ 'condition' ] = array( '' );
 
-	$z_mini_menu_predefined_items['use_woocommerce'][ 'name' ] = __('Manage WooCommerce', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_woocommerce'][ 'icon' ] = 'dashicons-cart';
-	$z_mini_menu_predefined_items['use_woocommerce'][ 'url' ] = admin_url( 'admin.php?page=wc-admin' );
-	$z_mini_menu_predefined_items['use_woocommerce'][ 'capability' ] = 'manage_woocommerce';
-	$z_mini_menu_predefined_items['use_woocommerce'][ 'condition' ] = array( 'if_class_exists', 'woocommerce' );
 
-	$z_mini_menu_predefined_items['use_woo_products'][ 'name' ] = __('Manage Products', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_woo_products'][ 'icon' ] = 'dashicons-screenoptions';
-	$z_mini_menu_predefined_items['use_woo_products'][ 'url' ] = admin_url( 'edit.php?post_type=product' );
-	$z_mini_menu_predefined_items['use_woo_products'][ 'capability' ] = 'edit_products';
-	$z_mini_menu_predefined_items['use_woo_products'][ 'condition' ] = array( 'if_class_exists', 'woocommerce' );
 
-	$z_mini_menu_predefined_items['use_fforms'][ 'name' ] = __('Fluent Forms', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_fforms'][ 'svg' ] = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiAjYTdhYWFkO308L3N0eWxlPjwvZGVmcz48dGl0bGU+ZGFzaGJvYXJkX2ljb248L3RpdGxlPjxnIGlkPSJMYXllcl8yIiBkYXRhLW5hbWU9IkxheWVyIDIiPjxnIGlkPSJMYXllcl8xLTIiIGRhdGEtbmFtZT0iTGF5ZXIgMSI+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTUuNTcsMEg0LjQzQTQuNDMsNC40MywwLDAsMCwwLDQuNDNWMTUuNTdBNC40Myw0LjQzLDAsMCwwLDQuNDMsMjBIMTUuNTdBNC40Myw0LjQzLDAsMCwwLDIwLDE1LjU3VjQuNDNBNC40Myw0LjQzLDAsMCwwLDE1LjU3LDBaTTEyLjgyLDE0YTIuMzYsMi4zNiwwLDAsMS0xLjY2LjY4SDYuNUEyLjMxLDIuMzEsMCwwLDEsNy4xOCwxM2EyLjM2LDIuMzYsMCwwLDEsMS42Ni0uNjhsNC42NiwwQTIuMzQsMi4zNCwwLDAsMSwxMi44MiwxNFptMy4zLTMuNDZhMi4zNiwyLjM2LDAsMCwxLTEuNjYuNjhIMy4yMWEyLjI1LDIuMjUsMCwwLDEsLjY4LTEuNjQsMi4zNiwyLjM2LDAsMCwxLDEuNjYtLjY4SDE2Ljc5QTIuMjUsMi4yNSwwLDAsMSwxNi4xMiwxMC41M1ptMC0zLjczYTIuMzYsMi4zNiwwLDAsMS0xLjY2LjY4SDMuMjFhMi4yNSwyLjI1LDAsMCwxLC42OC0xLjY0LDIuMzYsMi4zNiwwLDAsMSwxLjY2LS42OEgxNi43OUEyLjI1LDIuMjUsMCwwLDEsMTYuMTIsNi44MVoiLz48L2c+PC9nPjwvc3ZnPg==';
-	$z_mini_menu_predefined_items['use_fforms'][ 'url' ] = admin_url( 'admin.php?page=fluent_forms' );
-	$z_mini_menu_predefined_items['use_fforms'][ 'capability' ] = 'fluentform_forms_manager';
-	$z_mini_menu_predefined_items['use_fforms'][ 'condition' ] = array( 'if_function_exists', 'wpFluentForm' );
+/**
+ * The main plugin class
+ * 
+ * 
+ */
+class zMiniMenu {
 
-	$z_mini_menu_predefined_items['use_wpseo'][ 'name' ] = __('Manage Yoast SEO', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_wpseo'][ 'svg' ] = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJlbGVtIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB3aWR0aD0iMTc0cHgiIGhlaWdodD0iMTc0cHgiIHZpZXdCb3g9IjAgMCAxNzQgMTc0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxNzQgMTc0OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cjwvc3R5bGU+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0xNTIuOCw1Ni4xYzAtMTItOS4zLTIyLTIxLjEtMjMuMWw4LjktMjMuOEgxMTJsLTguNSwyMy43SDQ0LjRjLTEyLjgsMC0yMy4yLDEwLjQtMjMuMiwyMy4ydjYxLjcKCWMwLDEyLjgsMTAuNCwyMy4yLDIzLjIsMjMuMmg5LjdjLTAuNCwwLjEtMC44LDAuMS0xLjIsMC4ybC0yLjIsMC4zdjIzLjJoMi41YzE3LjksMCwyOC44LTksMzctMjMuN2g2Mi42VjU2LjF6IE01NS44LDE1OS42di0xMy43CgljMTEuNS0yLjMsMTUuNy05LjUsMTgtMTUuNmMyLjMtNS45LDIuMy0xMi40LDAtMTguM0w1MC45LDUzLjFINjdsMTYuMyw1MC45bDMyLjMtODkuOGgxNy43TDk0LjEsMTE5LjQKCUM4NC4xLDE0Ny41LDczLjUsMTU4LjcsNTUuOCwxNTkuNnoiLz4KPC9zdmc+Cg==';
-	$z_mini_menu_predefined_items['use_wpseo'][ 'url' ] = admin_url( 'admin.php?page=wpseo_dashboard' );
-	$z_mini_menu_predefined_items['use_wpseo'][ 'capability' ] = 'wpseo_manage_options';
-	$z_mini_menu_predefined_items['use_wpseo'][ 'condition' ] = array( 'if_class_exists', 'WPSEO_Options' );
+	/**
+	 * Plugin instance.
+	 *
+	 * @see get_instance()
+	 * @type object
+	 */
+	protected static $instance = NULL;
 
-	$z_mini_menu_predefined_items['use_acf'][ 'name' ] = __('Manage ACF', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_acf'][ 'icon' ] = 'dashicons-welcome-widgets-menus';
-	$z_mini_menu_predefined_items['use_acf'][ 'url' ] = admin_url( 'edit.php?post_type=acf-field-group' );
-	$z_mini_menu_predefined_items['use_acf'][ 'capability' ] = 'manage_options';
-	$z_mini_menu_predefined_items['use_acf'][ 'condition' ] = array( 'if_class_exists', 'ACF' );
+    /**
+	 * Plugin version
+	 *
+	 * @type string
+	 */
+	public $plugin_version = '';
 
-	$z_mini_menu_predefined_items['use_wpml'][ 'name' ] = __('Manage WPML', 'z-mini-admin-menu');
-	$z_mini_menu_predefined_items['use_wpml'][ 'image' ] = plugins_url('/sitepress-multilingual-cms/res/img/icon16.png');
-	$z_mini_menu_predefined_items['use_wpml'][ 'url' ] = admin_url( 'admin.php?page=sitepress-multilingual-cms/menu/languages.php' );
-	$z_mini_menu_predefined_items['use_wpml'][ 'capability' ] = 'wpml_manage_woocommerce_multilingual';
-	$z_mini_menu_predefined_items['use_wpml'][ 'condition' ] = array( 'if_function_exists', 'icl_object_id' );
+	/**
+	 * URL to this plugin's directory.
+	 *
+	 * @type string
+	 */
+	public $plugin_url = '';
 
-	// All custom items
-	$options = get_option( 'z_mini_menu_plugin_options' );
-	if ( !empty( $options[ 'use_custom' ] ) ) {
-		foreach ( $options[ 'use_custom' ] as $key => $custom_item ) {
-			$z_mini_menu_predefined_items['use_custom'][$key] = $custom_item;
+	/**
+	 * Path to this plugin's directory.
+	 *
+	 * @type string
+	 */
+	public $plugin_path = '';
+
+	/**
+	 * Predefined items to show in the menu
+	 *
+	 * @type array
+	 */
+	public $predefined_items = array();
+
+	/**
+	 * Plugin defaults for the options table
+	 *
+	 * @type array
+	 */
+	public $plugin_defaults = array();
+    
+	
+
+	/**
+	 * Access this plugin’s working instance
+	 *
+	 * @wp-hook plugins_loaded
+	 * @since   v2.0 [2024.11.15]
+	 * @return  object of this class
+	 */
+	public static function get_instance() {
+		NULL === self::$instance and self::$instance = new self;
+
+		return self::$instance;
+	}
+
+
+
+	/**
+	 * Plugin setup
+	 *
+	 * @wp-hook plugins_loaded
+	 * @since   v2.0 [2024.11.15]
+	 * @return  void
+	 */
+	public function plugin_setup() {
+
+        $this->plugin_version = '1.0.13'; // Z_MINI_ADMIN_MENU_VER
+		$this->plugin_url = plugins_url( '/', __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_URL
+		$this->plugin_path = plugin_dir_path( __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_PATH
+		$this->load_language( 'z-mini-admin-menu' );
+
+        include ( $this->plugin_path . 'inc/settings.php' );
+        $this->predefined_items = $z_mini_menu_predefined_items;
+
+        $this->plugin_defaults  = array(
+            'use_roles' => array (
+                0 => 'administrator'
+            )	
+        ); //Z_MINI_ADMIN_MENU_DEFAULTS'
+
+        // Add a link to the plugin settings page
+        $z_mini_menu_basename = plugin_basename( __FILE__ );
+        add_filter( 'plugin_action_links_' . $z_mini_menu_basename, array( $this, 'add_plugin_settings_link' ) );
+
+
+        if ( is_admin() ) {
+            // Include the admin functions
+            include( $this->plugin_path . 'admin.php' );
+        }
+
+		self::show_z_mini_menu();
+
+
+	}
+
+
+
+	/**
+	 * Constructor. Intentionally left empty and public.
+	 *
+	 * @see plugin_setup()
+	 * @since 2012.09.12
+	 */
+	public function __construct() {}
+
+
+
+	/**
+	 * Settings actions, loading options and trying to embed the menu
+	 *
+	 * @since v1.0
+	 */
+	public static function show_z_mini_menu() {
+		// Enqueue assets
+		add_action( 'wp_footer', array( __CLASS__, 'enqueue_assets' ) );
+
+		// Add the Mini Menu after content or in the footer
+		$options = get_option( 'z_mini_menu_plugin_options' );
+
+		if ( isset( $options[ 'use_after_main' ] ) && $options[ 'use_after_main' ]['checked'] == 1 ) {
+			// add_action( 'after_main', array( __CLASS__, 'embed_z_mini_menu' ) );
+			add_action( 'after_main', array( self::get_instance(), 'embed_z_mini_menu' ) );
+		} else {
+			// add_action( 'wp_footer', array( __CLASS__, 'embed_z_mini_menu' ) );
+			add_action( 'wp_footer', array( self::get_instance(), 'embed_z_mini_menu' ) );
 		}
 	}
 
 
 
 
-    // Add link to settings page on plugin overview
-    if ( !function_exists( 'z_mini_menu_settings_link' ) ) {
-        function z_mini_menu_settings_link( $links ) {
-            $settings_link = '<a href="options-general.php?page=z_mini_menu_plugin">' . __( 'Settings' ) . '</a>';
-            array_unshift( $links, $settings_link );
-            return $links;
-        }
-        $z_mini_menu_basename = plugin_basename( __FILE__ );
-        add_filter( "plugin_action_links_" . $z_mini_menu_basename, 'z_mini_menu_settings_link' );
-    }
 
 
-    /**
-     * Main class zMiniMenu
-     *
-     *
-     */
-    class zMiniMenu {
+	/**
+	 * Embedding the Mini Menu
+	 *
+	 * @since v1.0
+	 */
+	public function embed_z_mini_menu() {	
+		$options = wp_parse_args( get_option( 'z_mini_menu_plugin_options' ), $this->plugin_defaults );
 
-        public static function show_z_mini_menu() {
-            // Enqueue assets
-            add_action( 'wp_footer', array( __CLASS__, 'z_mini_menu_enqueue_assets' ) );
+		// only do stuff when
+		// - we're not on the admin panel and
+		// - the admin bar is not already showing
 
-            // Add the Mini Menu after content or in the footer
-            $options = get_option( 'z_mini_menu_plugin_options' );
+		if ( is_user_logged_in() && !is_admin() && ( empty($options['when_to_show']) || ( !is_admin_bar_showing() && !empty($options['when_to_show']) ) ) && self::user_has_roles($options['use_roles']) ) {
+			
+			/*
+				* Start the menu always with an edit post link (if we can), but let's
+				* 1.a. Make an array of extra menu items we can possibly show
+				* 1.b. Order them by save menu order
+				* 1.c. Get the values from $z_mini_menu_predefined_items;
+				*
+				*/
+			
+			$options_order = get_option( 'z_mini_menu_plugin_order' );
+			$ordered_options = array();
 
-            if ( isset( $options[ 'use_after_main' ] ) && $options[ 'use_after_main' ]['checked'] == 1 ) {
-                add_action( 'after_main', array( __CLASS__, 'embed_z_mini_menu' ) );
-            } else {
-                add_action( 'wp_footer', array( __CLASS__, 'embed_z_mini_menu' ) );
-            }
-
-        }
-
-
-        public static function z_mini_menu_enqueue_assets() {
-            wp_enqueue_style( 'z-mini-menu-css', Z_MINI_ADMIN_MENU_PLUGIN_URL . 'inc/style.css', array( 'dashicons' ), Z_MINI_ADMIN_MENU_VER );
-            wp_register_script( 'z-mini-menu-js', Z_MINI_ADMIN_MENU_PLUGIN_URL . 'inc/scripts.js', array( 'jquery' ), Z_MINI_ADMIN_MENU_VER, true );
-            wp_enqueue_script( 'z-mini-menu-js' );
-        }
-
-
-        public static function z_print_mini_menu_items( $html_items = array() ) {
-            // Function to output the items
-            foreach ( $html_items as $item ) {
-
-				$has_submenu_class = '';
-
-				// check on condition of item
-				if( !empty($item['condition']) ) {
-					if ( $item['condition'][0] == 'if_class_exists' && !class_exists( $item['condition'][1] ) ) {
-						continue;
-					}
-					if ( $item['condition'][0] == 'if_function_exists' && !function_exists( $item['condition'][1] ) ) {
-						continue;
-					}
-					if ( $item['condition'][0] == 'if_is_multisite' && !is_multisite() ) {
-						continue;
-					}
-				}
-
-				// check for possible capabilities for the user
-				if( !empty($item['capability']) ) {
-					$continue = false;
-					if( current_user_can($item['capability'])) {
-						$continue = true;
-					}
-					if(!$continue) {
-						continue;
-					}
-				}
-
-				// check for possible role restriction for the user
-				if( !empty($item['role']) ) {
-					$continue = false;
-					if( z_mini_menu_user_has_role( $item['role'] ) ) {
-						$continue = true;
-					}
-					if(!$continue) {
-						continue;
-					}
-				}				
-				
-				// proces use_add_new
-				// Add new posts/pages/CPTs, get all public post types
-				if( !empty($item['has_submenu_items']) ) {
-					$has_submenu_class = ' has-submenu';
-					$html_add_new_items = array();
-					$post_args = array( 'public' => true );
-					$output = 'objects';
-					$operator = 'and';
-					$post_types = get_post_types( $post_args, $output, $operator );
-
-					foreach ( $post_types as $post_type ) {
-						$pto = get_post_type_object( $post_type->name ); // determine caps
-						$edit_posts_cap = $pto->cap->edit_posts;
-						if ( current_user_can( $edit_posts_cap ) ) { // if current user can, add the new item link
-							$subitem = array();
-							$subitem['url'] = admin_url( 'post-new.php?post_type=' . $post_type->name );
-							$subitem['label'] =$post_type->labels->singular_name;
-							$html_add_new_items[] = $subitem;
+			// re-order items
+			if( !empty($options_order) ) {
+				// loop through all ordered items and add them to new
+				foreach($options_order as $key => $option) {
+					if( !is_numeric($option)) {
+						if(isset($options[$option])) {
+							$ordered_options[$key] = $option;
 						}
-					}
-					if( empty($html_add_new_items) ) {
-						continue;
+						unset($options[$option]);
+					} else {
+						if(isset($options['use_custom'][$option])) {
+							$ordered_options[$key] = $option;
+						}
+						unset($options['use_custom'][$option]);
 					}
 				}
+			}
+			// loop through remaining options
+			foreach($options as $key => $option) {
+				if( $key == 'bg_color' || $key == 'use_after_main' || $key == 'use_roles' ) {
+					continue;
+				}
+				if( $key == 'use_custom' ) {
+					foreach($option as $subkey => $custom ) {
+						$ordered_options[] = $subkey;
+					}
+				} else {
+					$ordered_options[] = $key;
+				}
+			}
+
+			$ordered_items_with_values = array();
+			foreach($ordered_options as $key => $option) {
+				if( !is_numeric($option)) {
+					$ordered_items_with_values[] = $this->predefined_items[$option];
+				} else {
+					$ordered_items_with_values[] = $this->predefined_items['use_custom'][$option];
+				}
+			}
 
 
-                echo '<div class="z_mini_menu-item' . esc_attr($has_submenu_class) . '">';
-                echo '<a href="' . esc_url($item['url']) . '" title="' . esc_attr( $item['name'] ) . '">';
 
-				if( !empty($item['icon']) ) { // if the item has a dashicon
-					echo '<span class="dashicons-before ' . esc_attr($item['icon']) . '">';
+			// we always show the link to the Dashboard first
+			if ( current_user_can( 'manage_options' ) ) {
+				$dashboard_item = $this->predefined_items['use_dashboard'];
+				array_unshift($ordered_items_with_values, $dashboard_item);
+			}
 
-				} elseif( !empty($item['svg']) ) {
-					echo '<span class="icon svg" style="background-image:url('.esc_attr($item['svg']).') !important;">';
+			// we always show the logout link at the end
+			$logout_item = array();
+			$logout_item['name'] = __( 'Logout', 'z-mini-admin-menu' );
+			$logout_item['icon'] = 'dashicons-exit flipped';
+			$logout_item['url'] = wp_logout_url();
+			$logout_item['capability'] = false;
+			$logout_item['condition'] = array('');
+			array_push($ordered_items_with_values, $logout_item);
 
-				} elseif( !empty($item['image']) ) {
-					echo '<span class="icon image"><img src="' . esc_url($item['image']) .'" alt="">';
+
+
+			/*
+				* 2. Check if we have any items and if we can edit posts.
+				*    Else showing a menu makes no sense, right?
+				*
+				*/
+
+			if ( count( $ordered_items_with_values ) > 0 || current_user_can( 'edit_posts' ) ) {
+				// begin menu
+				$bg_color = '#000';
+				if ( !empty( $options[ 'bg_color' ] ) ) {
+					$bg_color = $options[ 'bg_color' ];
+				}
+				
+				
+				
+				// 2a. The custom element
+				echo '<z-mini-menu></z-mini-menu>';
+			
+				// 2b. Create the template
+				echo '<template id="z-mini-menu-template">';
+			
+				// 2c. Output the actual menu-items
+				echo '<div id="admin-z-mini-menu" data-barba-prevent="all" style="--z-mini-menu-bg-color:'. esc_attr($bg_color) .';">';
+
+				// Add edit link
+				if ( current_user_can( 'edit_posts' ) ) {
+					$edit_post_url = get_edit_post_link();
+					
+					echo '<div class="z_mini_menu-item"><a class="btn-edit-post-link" href="'.$edit_post_url.'"><span class="dashicons-before dashicons-edit-large"><span class="sr-only">'.esc_html__( 'Edit', 'z-mini-admin-menu' ).'</span></span></a></div>';
+
+
+					// Add 'Edit with Elementor' if Elementor is available and post can be edited with elementor
+					$elementor_url = self::get_elementor_edit_link();
+					$elementor_svg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJlbGVtIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB3aWR0aD0iMTc0cHgiIGhlaWdodD0iMTc0cHgiIHZpZXdCb3g9IjAgMCAxNzQgMTc0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxNzQgMTc0OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cjwvc3R5bGU+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik04NywwQzM5LDAsMCwzOSwwLDg3czM5LDg3LDg3LDg3czg3LTM5LDg3LTg3UzEzNSwwLDg3LDB6IE02MywxMjcuM0g0N1Y0Ny40aDE2VjEyNy4zeiBNMTI3LDEyNy4zSDc5di0xNmg0OAoJVjEyNy4zeiBNMTI3LDk1LjNINzl2LTE2aDQ4Vjk1LjN6IE0xMjcsNjMuM0g3OXYtMTZoNDhWNjMuM3oiLz4KPC9zdmc+Cg==';
+					if( !empty($elementor_url) ) {
+						echo '<div class="z_mini_menu-item"><a href="' . esc_url($elementor_url) . '" title="' . esc_attr__( 'Edit with Elementor', 'z-mini-admin-menu' ) . '"><span class="icon svg" style="background-image:url('.esc_attr($elementor_svg).') !important;"><span class="sr-only">' . esc_attr__( 'Edit with Elementor', 'z-mini-admin-menu' ) . '</span></span></a></div>';
+					}
+
+
+				}
+
+				if ( count( $ordered_items_with_values ) > 1 ) {
+					// Make menu expandable
+					echo '<div class="z_mini_menu-item expand">';
+					echo '<a href="#z-mini-menu-expanded" id="expand-z-mini-menu" title="' . esc_attr__( 'Expand mini menu', 'z-mini-admin-menu' ) . '"><span class="dashicons-before dashicons-ellipsis"><span class="sr-only">' . esc_html__( 'Expand mini menu', 'z-mini-admin-menu' ) . '</span></span></a>';
+					echo '</div>';
+
+					echo '<div class="z_mini_menu-item-holder">';
+					self::z_print_mini_menu_items( $ordered_items_with_values );
+					echo '</div>';
+
+					echo '<div class="z_mini_menu-item collapse">';
+					echo '<a href="#z-mini-menu-collapsed" id="collapse-z-mini-menu" title="' . esc_attr__( 'Collapse mini menu', 'z-mini-admin-menu' ) . '"><span class="dashicons-before dashicons-ellipsis"><span class="sr-only">' . esc_html__( 'Collapse mini menu', 'z-mini-admin-menu' ) . '</span></span></a>';
+					echo '</div>';
+
 
 				} else {
-					echo '<span class="dashicons-before dashicons-smiley">';
+					self::z_print_mini_menu_items( $ordered_items_with_values );
 				}
-
-				echo '<span class="sr-only">' . esc_attr( $item['name'] ) . '</span></span></a>';
-
-				if( !empty($item['has_submenu_items']) && !empty($html_add_new_items) ) {
-					echo '<ul class="fold-out-sub">';
-					foreach($html_add_new_items as $subitem) {
-						echo '<li><a href="' . esc_url($subitem['url']) . '">' . esc_html($subitem['label']) . '</a></li>';
-					}
-					echo '</ul>';
-				}
-                echo '</div>';
-            }
-        }
-
-
-
-
-
-        // Embedding the Mini Menu
-        public static function embed_z_mini_menu() {
-			global $z_mini_menu_predefined_items;
-					
-			$options = wp_parse_args( get_option( 'z_mini_menu_plugin_options' ), Z_MINI_ADMIN_MENU_DEFAULTS );
-
-            // only do stuff when
-            // - we're not on the admin panel and
-            // - the admin bar is not already showing
-//            if ( is_user_logged_in() && !is_admin() && !is_admin_bar_showing() && !current_user_can( 'subscriber' ) ) {
-            if ( is_user_logged_in() && !is_admin() && !is_admin_bar_showing() && z_mini_menu_user_has_roles($options['use_roles']) ) {
-
-                /*
-                 * Start the menu always with an edit post link (if we can), but let's
-                 * 1.a. Make an array of extra menu items we can possibly show
-				 * 1.b. Order them by save menu order
-				 * 1.c. Get the values from $z_mini_menu_predefined_items;
-                 *
-                 */
+				// end 2.c menu
+				echo '</div>';
 				
-				$options_order = get_option( 'z_mini_menu_plugin_order' );
-				$ordered_options = array();
+				// 2d. Include dashicons
+				echo '<link rel="stylesheet" id="dashicons-css" href="'.site_url().'/wp-includes/css/dashicons.min.css"  media="all" />';
+				
+				// 2e. Include the minified stylesheet
+				echo '<style>#admin-z-mini-menu{position:fixed;z-index:9999;top:150px;left:0;display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto;border-radius:0 5px 5px 0;background:var(--z-mini-menu-bg-color);font-family:sans-serif;}#admin-z-mini-menu .z_mini_menu-item-holder{display:none}#admin-z-mini-menu.open .z_mini_menu-item-holder{display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto}#admin-z-mini-menu .z_mini_menu-item{width:40px;height:40px;background:transparent;display:flex;justify-content:center;align-content:center;align-items:center;position:relative}#admin-z-mini-menu .z_mini_menu-item a{display:block;position:relative;font-size:16px;line-height:16px;text-decoration:none;transition:all 250ms ease-in-out;color:#ffffff90;color:#fff;opacity:.65}#admin-z-mini-menu .z_mini_menu-item a:hover{text-decoration:none;color:#fff;opacity:1}#admin-z-mini-menu .z_mini_menu-item.collapse,#admin-z-mini-menu.open .z_mini_menu-item.expand{display:none}#admin-z-mini-menu.open .z_mini_menu-item.collapse{display:flex}#admin-z-mini-menu ul.fold-out-sub{list-style:none;padding-left:0;position:absolute;background:var(--z-mini-menu-bg-color);left:40px;top:0;border-radius:0 5px 5px 0;margin:5px 0;display:none}#admin-z-mini-menu .has-submenu:hover ul.fold-out-sub{display:block}#admin-z-mini-menu ul.fold-out-sub li{list-style:none;margin:0;padding:0}#admin-z-mini-menu ul.fold-out-sub li a{padding:6px 16px 6px 12px;font-size:13px;;line-height:16px;}#admin-z-mini-menu .dashicons-before.flipped::before{transform:rotate(180deg)}#admin-z-mini-menu .z_mini_menu-item a .icon.image,#admin-z-mini-menu .z_mini_menu-item a .icon.svg{display:inline-block;width:20px;height:20px;background-repeat:no-repeat;background-position:center;background-size:20px auto}#admin-z-mini-menu .sr-only{border:0;clip:rect(1px,1px,1px,1px);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal}.z-mini-admin-menu-badge{position:absolute;display:inline-block;vertical-align:top;box-sizing:border-box;margin:-8px 0 0 -1px;padding:0 5px;min-width:18px;height:18px;border-radius:9px;background-color:#d63638;color:#fff;font-size:11px;line-height:1.6;text-align:center;z-index: 26;}</style>';
+				
+				// end 2c. end template
+				echo '</template>';
+				
+				// 2f. Include the JavaScript
+				echo '<script>customElements.define("z-mini-menu",class extends HTMLElement{constructor(){super();let template=document.getElementById("z-mini-menu-template");let templateContent=template.content;const shadowRoot=this.attachShadow({mode:"open"});shadowRoot.appendChild(templateContent.cloneNode(true));shadowRoot.getElementById("expand-z-mini-menu").addEventListener("click",(event)=>{event.preventDefault();shadowRoot.getElementById("admin-z-mini-menu").classList.add("open")});shadowRoot.getElementById("collapse-z-mini-menu").addEventListener("click",(event)=>{event.preventDefault();shadowRoot.getElementById("admin-z-mini-menu").classList.remove("open")})}});</script>';
 
-				// re-order items
-				if( !empty($options_order) ) {
-					// loop through all ordered items and add them to new
-					foreach($options_order as $key => $option) {
-						if( !is_numeric($option)) {
-							if(isset($options[$option])) {
-								$ordered_options[$key] = $option;
-							}
-							unset($options[$option]);
-						} else {
-							if(isset($options['use_custom'][$option])) {
-								$ordered_options[$key] = $option;
-							}
-							unset($options['use_custom'][$option]);
-						}
+			}
+		}
+	}
+
+
+
+
+	/**
+	 * Printing the Mini Menu
+	 *
+	 * @since v1.0
+	 */
+	public static function z_print_mini_menu_items( $html_items = array() ) {
+		// Function to output the items
+		
+		foreach ( $html_items as $item ) {
+
+			$has_submenu_class = '';
+
+			// check on condition of item
+			if( !empty($item['condition']) ) {
+				if ( $item['condition'][0] == 'if_class_exists' && !class_exists( $item['condition'][1] ) ) {
+					continue;
+				}
+				if ( $item['condition'][0] == 'if_function_exists' && !function_exists( $item['condition'][1] ) ) {
+					continue;
+				}
+				if ( $item['condition'][0] == 'if_is_multisite' && !is_multisite() ) {
+					continue;
+				}
+			}
+
+			// check for possible capabilities for the user
+			if( !empty($item['capability']) ) {
+				$continue = false;
+				if( current_user_can($item['capability'])) {
+					$continue = true;
+				}
+				if(!$continue) {
+					continue;
+				}
+			}
+
+			// check for possible role restriction for the user
+			if( !empty($item['role']) ) {
+				$continue = false;
+				if( self::user_has_role( $item['role'] ) ) {
+					$continue = true;
+				}
+				if(!$continue) {
+					continue;
+				}
+			}				
+			
+			// proces use_add_new
+			// Add new posts/pages/CPTs, get all public post types
+			if( !empty($item['has_submenu_items']) ) {
+				$has_submenu_class = ' has-submenu';
+				$html_add_new_items = array();
+				$post_args = array( 'public' => true );
+				$output = 'objects';
+				$operator = 'and';
+				$post_types = get_post_types( $post_args, $output, $operator );
+
+				foreach ( $post_types as $post_type ) {
+					$pto = get_post_type_object( $post_type->name ); // determine caps
+					$edit_posts_cap = $pto->cap->edit_posts;
+					if ( current_user_can( $edit_posts_cap ) ) { // if current user can, add the new item link
+						$subitem = array();
+						$subitem['url'] = admin_url( 'post-new.php?post_type=' . $post_type->name );
+						$subitem['label'] =$post_type->labels->singular_name;
+						$html_add_new_items[] = $subitem;
 					}
 				}
-				// loop through remaining options
-				foreach($options as $key => $option) {
-					if( $key == 'bg_color' || $key == 'use_after_main' || $key == 'use_roles' ) {
-						continue;
-					}
-					if( $key == 'use_custom' ) {
-						foreach($option as $subkey => $custom ) {
-							$ordered_options[] = $subkey;
-						}
-					} else {
-						$ordered_options[] = $key;
-					}
+				if( empty($html_add_new_items) ) {
+					continue;
 				}
-
-				$ordered_items_with_values = array();
-				foreach($ordered_options as $key => $option) {
-					if( !is_numeric($option)) {
-						$ordered_items_with_values[] = $z_mini_menu_predefined_items[$option];
-					} else {
-						$ordered_items_with_values[] = $z_mini_menu_predefined_items['use_custom'][$option];
-					}
-				}
+			}
 
 
+			echo '<div class="z_mini_menu-item' . esc_attr($has_submenu_class) . '">';
+			echo '<a href="' . esc_url($item['url']) . '" title="' . esc_attr( $item['name'] ) . '">';
 
-				// we always show the link to the Dashboard first
-                if ( current_user_can( 'manage_options' ) ) {
-					$dashboard_item = $z_mini_menu_predefined_items['use_dashboard'];
-					array_unshift($ordered_items_with_values, $dashboard_item);
-                }
+			if( !empty($item['icon']) ) { // if the item has a dashicon
+				echo '<span class="dashicons-before ' . esc_attr($item['icon']) . '">';
 
-                // we always show the logout link at the end
-				$logout_item = array();
-				$logout_item['name'] = __( 'Logout', 'z-mini-admin-menu' );
-				$logout_item['icon'] = 'dashicons-exit flipped';
-				$logout_item['url'] = wp_logout_url();
-				$logout_item['capability'] = false;
-				$logout_item['condition'] = array('');
-				array_push($ordered_items_with_values, $logout_item);
+			} elseif( !empty($item['svg']) ) {
+				echo '<span class="icon svg" style="background-image:url('.esc_attr($item['svg']).') !important;">';
 
+			} elseif( !empty($item['image']) ) {
+				echo '<span class="icon image"><img src="' . esc_url($item['image']) .'" alt="">';
 
+			} else {
+				echo '<span class="dashicons-before dashicons-smiley">';
+			}
 
-                /*
-                 * 2. Check if we have any items and if we can edit posts.
-                 *    Else showing a menu makes no sense, right?
-                 *
-                 */
+			echo '<span class="sr-only">' . esc_attr( $item['name'] ) . '</span></span>';
+			
+			$use_dashboard = true;
+			// include admin update functions	
+			if( current_user_can('update_core') ) {
 
-                if ( count( $ordered_items_with_values ) > 0 || current_user_can( 'edit_posts' ) ) {
-                    // begin menu
-                    $bg_color = '#000';
-                    if ( !empty( $options[ 'bg_color' ] ) ) {
-						$bg_color = $options[ 'bg_color' ];
-                    }
-                    echo '<div id="admin-z-mini-menu" data-barba-prevent="all" style="background-color:'. esc_attr($bg_color) .';">';
-
-                    // Add edit link
-                    if ( current_user_can( 'edit_posts' ) ) {
-                        edit_post_link( '<span class="dashicons-before dashicons-edit-large"><span class="sr-only">'.esc_html__( 'Edit', 'z-mini-admin-menu' ).'</span></span>', '<div class="z_mini_menu-item">', '</div>', null, 'btn-edit-post-link' );
-
-
-						// Add 'Edit with Elementor' if Elementor is available and post can be edited with elementor
-						$elementor_url = z_mini_menu_get_elementor_edit_link();
-						$elementor_svg = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJlbGVtIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB3aWR0aD0iMTc0cHgiIGhlaWdodD0iMTc0cHgiIHZpZXdCb3g9IjAgMCAxNzQgMTc0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxNzQgMTc0OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cjwvc3R5bGU+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik04NywwQzM5LDAsMCwzOSwwLDg3czM5LDg3LDg3LDg3czg3LTM5LDg3LTg3UzEzNSwwLDg3LDB6IE02MywxMjcuM0g0N1Y0Ny40aDE2VjEyNy4zeiBNMTI3LDEyNy4zSDc5di0xNmg0OAoJVjEyNy4zeiBNMTI3LDk1LjNINzl2LTE2aDQ4Vjk1LjN6IE0xMjcsNjMuM0g3OXYtMTZoNDhWNjMuM3oiLz4KPC9zdmc+Cg==';
-						if( !empty($elementor_url) ) {
-							echo '<div class="z_mini_menu-item"><a href="' . esc_url($elementor_url) . '" title="' . esc_attr__( 'Edit with Elementor', 'z-mini-admin-menu' ) . '"><span class="icon svg" style="background-image:url('.esc_attr($elementor_svg).') !important;"><span class="sr-only">' . esc_attr__( 'Edit with Elementor', 'z-mini-admin-menu' ) . '</span></span></a></div>';
+				if( !empty($item['id']) && $item['id'] == 'use_dashboard' && !empty($use_dashboard) ) {
+					require_once( ABSPATH . 'wp-admin/includes/update.php' );
+					require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+					if( function_exists('get_plugin_updates') ) {
+						// $core_updates = get_core_updates(array('available'));
+						$plugin_updates = get_plugin_updates();
+						$theme_updates = get_theme_updates();
+						$no_updates = !empty($core_updates) ? count($core_updates) : 0;
+						$no_updates += !empty($plugin_updates) ? count($plugin_updates) : 0;
+						$no_updates += !empty($theme_updates) ? count($theme_updates) : 0;
+						if( $no_updates > 0 ) {
+							echo '<span class="z-mini-admin-menu-badge">'.$no_updates.'</span>';
 						}
+					}				
+				}
+			}
+			echo '</a>';
+
+			if( !empty($item['has_submenu_items']) && !empty($html_add_new_items) ) {
+				echo '<ul class="fold-out-sub">';
+				foreach($html_add_new_items as $subitem) {
+					echo '<li><a href="' . esc_url($subitem['url']) . '">' . esc_html($subitem['label']) . '</a></li>';
+				}
+				echo '</ul>';
+			}
+			echo '</div>';
+		}
+	}
 
 
-                    }
-
-                    if ( count( $ordered_items_with_values ) > 1 ) {
-                        // Make menu expandable
-                        echo '<div class="z_mini_menu-item expand">';
-                        echo '<a href="#z-mini-menu-expanded" id="expand-z-mini-menu" title="' . esc_attr__( 'Expand mini menu', 'z-mini-admin-menu' ) . '"><span class="dashicons-before dashicons-ellipsis"><span class="sr-only">' . esc_html__( 'Expand mini menu', 'z-mini-admin-menu' ) . '</span></span></a>';
-                        echo '</div>';
-
-                        echo '<div class="z_mini_menu-item-holder">';
-                        self::z_print_mini_menu_items( $ordered_items_with_values );
-                        echo '</div>';
-
-                        echo '<div class="z_mini_menu-item collapse">';
-                        echo '<a href="#z-mini-menu-collapsed" id="collapse-z-mini-menu" title="' . esc_attr__( 'Collapse mini menu', 'z-mini-admin-menu' ) . '"><span class="dashicons-before dashicons-ellipsis"><span class="sr-only">' . esc_html__( 'Collapse mini menu', 'z-mini-admin-menu' ) . '</span></span></a>';
-                        echo '</div>';
 
 
-                    } else {
-                        self::z_print_mini_menu_items( $ordered_items_with_values );
-                    }
 
-                    // end menu
-                    echo '</div>';
-                }
-            }
-        }
-    }
+	/**
+	 * Check if the user has the given roles
+	 *
+     * @param string $role
+	 * @since v1.0.5
+	 */
+	public static function user_has_role( $role = false ) {
+		if( empty($role) ) { return false; }
+		$user = wp_get_current_user();
+		if( in_array( $role, (array) $user->roles ) ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    zMiniMenu::show_z_mini_menu();
-}
 
-function z_mini_menu_get_elementor_edit_link() {
+
+
+	/**
+	 * Check if the user has any of the gives roles
+	 *
+     * @param array $roles 
+	 * @since v1.0.5
+	 */
+	public static function user_has_roles( $roles = false ){
+		if( empty($roles) ) { return false; }
+		$user = wp_get_current_user();
+		
+		if( is_array($roles) ) {
+			if( !empty( array_intersect( $roles, (array) $user->roles ) ) ) {
+				return true;
+			} else {
+				return false;
+			}	
+		} else {
+			// fallback
+			self::user_has_role( $roles );
+		}
+	} 
+
+
+
+	/**
+	 * Get the edit link for Elementor
+	 *
+	 * @since v1.0.3
+	 */
+	public static function get_elementor_edit_link() {
 		// if accidently called on admin page, bail out
 		if( is_admin() ) {
 			return false;
@@ -432,7 +547,7 @@ function z_mini_menu_get_elementor_edit_link() {
 		global $post;
 		$post_id = $post->ID;
 		$post_type = $post->post_type;
-
+	
 		$post_types_for_elementor = array(
 			'page',
 			'post',
@@ -446,39 +561,56 @@ function z_mini_menu_get_elementor_edit_link() {
 		} else {
 			return false;
 		}
-
-}
-
-
-function z_mini_menu_user_has_role( $role = false ) {
-	if( empty($role) ) { return false; }
-	$user = wp_get_current_user();
-	if( in_array( $role, (array) $user->roles ) ) {
-		return true;
-	} else {
-		return false;
-	}
-}
-function z_mini_menu_user_has_roles( $roles = false ){
-	if( empty($roles) ) { return false; }
-	$user = wp_get_current_user();
 	
-	if( is_array($roles) ) {
-		if( !empty( array_intersect( $roles, (array) $user->roles ) ) ) {
-			return true;
-		} else {
-			return false;
-		}	
-	} else {
-		// fallback
-		z_mini_menu_user_has_role( $roles );
 	}
-} 
+
+
+
+	/**
+	 * Add link to settings page on plugin overview
+	 *
+	 * @since v1.0
+	 */
+    public static function add_plugin_settings_link( $links ) {
+        $settings_link = '<a href="options-general.php?page=z_mini_menu_plugin">' . __( 'Settings' ) . '</a>';
+        array_unshift( $links, $settings_link );
+        return $links;
+    }
+
+
+    
+	/**
+	 * Enqueue WP assets
+     * 
+     * Even though the Mini Menu is loaded in the shadow DOM, due to the scope of @font-face,
+     * we need to load th dashicons in both the light DOM and shadow DOM
+	 *
+	 * @since v1.0
+	 */
+	public static function enqueue_assets() {
+		wp_enqueue_style( 'dashicons');
+	}
 
 
 
 
-if ( is_admin() ) {
-    // Include the admin functions
-    include( Z_MINI_ADMIN_MENU_PLUGIN_PATH . '/admin.php' );
+	/**
+	 * Loads translation file.
+	 *
+	 * Accessible to other classes to load different language files (admin and
+	 * front-end for example).
+	 *
+	 * @wp-hook init
+	 * @param   string $domain
+	 * @since   v2.0 [2024.11.15]
+	 * @return  void
+	 */
+	public function load_language( $text_domain ) {
+		load_plugin_textdomain(
+			$text_domain,
+			false,
+			false // $this->plugin_path . '/languages'
+		);
+	}
 }
+
