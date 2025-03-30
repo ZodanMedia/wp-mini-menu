@@ -1,6 +1,9 @@
 <?php
 
-// predefines settings
+/*
+ * 1.  All predefined settings
+ * 
+ */
 $z_mini_menu_predefined_items = array();
 $z_mini_menu_predefined_items['use_dashboard'][ 'id' ] = 'use_dashboard';
 $z_mini_menu_predefined_items['use_dashboard'][ 'name' ] = __( 'Visit dashboard', 'z-mini-admin-menu' );
@@ -96,14 +99,27 @@ $z_mini_menu_predefined_items['use_wpml'][ 'condition' ] = array( 'if_function_e
 
 
 /*
- * All custom defined items from the options table
+ * 2. Get all saved settings from the options table
  * 
  */
 $options = get_option( 'z_mini_menu_plugin_options' );
+/*
+ * 3. Loop through all custom defined items in the options table
+ * 
+ */
 if ( !empty( $options[ 'use_custom' ] ) ) {
     foreach ( $options[ 'use_custom' ] as $key => $custom_item ) {
         $z_mini_menu_predefined_items['use_custom'][$key] = $custom_item;
     }
+}
+/*
+ * 4. Make sure we have at least 1 role to match against
+ * 
+ */
+if( empty( $options['use_roles']) ) {
+    $options['use_roles'] = array (
+        0 => 'administrator'
+    );
 }
 
 ?>

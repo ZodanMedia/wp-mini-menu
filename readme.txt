@@ -5,7 +5,7 @@ Tags: admin menu, tiny menu, mini menu, cleanup, development
 Description: A frontpage mini menu to access most common admin items when te admin bar is not active
 Requires at least: 5.5
 Tested up to: 6.7.2
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -78,6 +78,9 @@ Yes. We currently have on our roadmap:
 
 == Changelog ==
 
+= 2.0.3 =
+* Fixed little annoying empty array() bug
+
 = 2.0.2 =
 * Fixed general availability (now based on 'edit_posts' capability)
 * Removed the option to replace the WP Toolbar, this is now the default. But:
@@ -137,4 +140,3 @@ Yes. We currently have on our roadmap:
 
 = 1.0 =
 * Very first version of this plugin
-

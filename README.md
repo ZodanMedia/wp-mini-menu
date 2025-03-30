@@ -33,4 +33,3 @@ This should work as of WordPress v5.5 up till v6.7.2
 ## Contributing
 
 If you have nice options or experience problems, drop us a line: plugins@zodan.nl
-

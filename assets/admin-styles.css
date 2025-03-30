@@ -22,6 +22,7 @@
     --zmam-color-border-icon-picker-item-hover: #999;
     --zmam-color-bg-icon-picker-item-hover: #efefef;
     --zmam-color-text-notice: #000;
+
 }
 .z-warning {
     background: var(--zmam-color-bg-warning);

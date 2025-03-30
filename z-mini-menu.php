@@ -7,7 +7,7 @@
  * Requires at least: 5.5
  * Tested up to: 6.7.2
  * Description: A frontpage mini menu to access most common admin items when te admin bar is not active
- * Version: 2.0.2
+ * Version: 2.0.3
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-admin-menu
@@ -22,6 +22,7 @@
 if ( !defined( 'WPINC' ) ) {
     die;
 }
+
 
 
 
@@ -61,7 +62,7 @@ class zMiniMenu {
 	 *
 	 * @type string
 	 */
-	public $plugin_version = '2.0.2';
+	public $plugin_version = '';
 
 	/**
 	 * URL to this plugin's directory.
@@ -197,7 +198,7 @@ class zMiniMenu {
 	 */
 	public function plugin_setup() {
 
-        $this->plugin_version = '2.0.1'; // Z_MINI_ADMIN_MENU_VER
+        $this->plugin_version = '2.0.3'; // Z_MINI_ADMIN_MENU_VER
 		$this->plugin_url = plugins_url( '/', __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_URL
 		$this->plugin_path = plugin_dir_path( __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_PATH
 		$this->load_language( 'z-mini-admin-menu' );
@@ -563,7 +564,7 @@ class zMiniMenu {
 
 
 	/**
-	 * Check if the user has the given roles
+	 * Check if the user has a given role
 	 *
      * @param string $role
 	 * @since v1.0.5
@@ -590,6 +591,11 @@ class zMiniMenu {
 		if( empty($roles) ) { return false; }
 		$user = wp_get_current_user();
 		
+		if( empty($roles) ) {
+			// in case no roles have been defined, limit to admins
+			$roles = array('administrator');
+		}
+
 		if( is_array($roles) ) {
 			if( !empty( array_intersect( $roles, (array) $user->roles ) ) ) {
 				return true;
