@@ -1,7 +1,5 @@
 <?php
 
-
-
 // predefines settings
 $z_mini_menu_predefined_items = array();
 $z_mini_menu_predefined_items['use_dashboard'][ 'id' ] = 'use_dashboard';
@@ -107,7 +105,5 @@ if ( !empty( $options[ 'use_custom' ] ) ) {
         $z_mini_menu_predefined_items['use_custom'][$key] = $custom_item;
     }
 }
-
-
 
 ?>
