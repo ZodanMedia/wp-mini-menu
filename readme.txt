@@ -1,11 +1,11 @@
 === Z Mini Admin Menu ===
 Contributors: martenmoolenaar
 Donate link: https://www.buymeacoffee.com/zodan
-Tags: admin menu, tiny menu, mini menu, cleanup, development, elementor
+Tags: admin menu, tiny menu, mini menu, cleanup, development
 Description: A frontpage mini menu to access most common admin items when te admin bar is not active
 Requires at least: 5.5
-Tested up to: 6.7
-Stable tag: 2.0
+Tested up to: 6.7.2
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -78,6 +78,15 @@ Yes. We currently have on our roadmap:
 
 == Changelog ==
 
+= 2.0.2 =
+* Fixed general availability (now based on 'edit_posts' capability)
+* Removed the option to replace the WP Toolbar, this is now the default. But:
+* Added personal setting to show regular toolbar :(
+* Small changes to the way the regular toolbar is hidden and the Mini Menu is constructed
+
+= 2.0.1 =
+* Fixed tiny warnings
+
 = 2.0 =
 * Refactored version of the plugin
 
@@ -128,3 +137,4 @@ Yes. We currently have on our roadmap:
 
 = 1.0 =
 * Very first version of this plugin
+

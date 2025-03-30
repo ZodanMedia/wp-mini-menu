@@ -10,6 +10,7 @@
  * License: GPL2
  */
 
+ 
 // If this file is called directly, abort.
 if ( !defined( 'WPINC' ) ) {
     die;
@@ -61,19 +62,6 @@ $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 6 ][ 'title' ] = __( 'Woocommerc
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 6 ][ 'label' ] = __('Include the Woocommerce admin link', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 6 ][ 'condition' ] = array( 'if_class_exists', 'woocommerce' );
 
-$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'name' ] = 'use_woo_products';
-$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'title' ] = __( 'Woocommerce products', 'z-mini-admin-menu');
-$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'label' ] = __('Include the Woocommerce products link', 'z-mini-admin-menu');
-$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'condition' ] = array( 'if_class_exists', 'woocommerce' );
-
-$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'name' ] = 'use_fforms';
-$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'title' ] = __('FluentForms', 'z-mini-admin-menu');
-$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'label' ] = __('Include a link to FluentForms', 'z-mini-admin-menu');
-$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'condition' ] = array( 'if_function_exists', 'wpFluentForm' );
-
-
-
-
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 7 ][ 'name' ] = 'use_wpseo';
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 7 ][ 'title' ] = __( 'SEO (Yoast)', 'z-mini-admin-menu', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 7 ][ 'label' ] = __('Include a link to the WP SEO (Yoast) dashboard', 'z-mini-admin-menu');
@@ -89,6 +77,18 @@ $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 9 ][ 'title' ] = __('WPML', 'z-m
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 9 ][ 'label' ] = __('Include a link to the WPML dashboard', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 9 ][ 'condition' ] = array( 'if_function_exists', 'icl_object_id' );
 
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'name' ] = 'use_woo_products';
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'title' ] = __( 'Woocommerce products', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'label' ] = __('Include the Woocommerce products link', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 10 ][ 'condition' ] = array( 'if_class_exists', 'woocommerce' );
+
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'name' ] = 'use_fforms';
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'title' ] = __('FluentForms', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'label' ] = __('Include a link to FluentForms', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'condition' ] = array( 'if_function_exists', 'wpFluentForm' );
+
+
+
 
 
 
@@ -103,16 +103,10 @@ $z_mini_menu_settings_sections[ 1 ][ 'items' ][ 0 ][ 'title' ] = __('Custom item
 $z_mini_menu_settings_sections[ 1 ][ 'items' ][ 0 ][ 'label' ] = '';
 $z_mini_menu_settings_sections[ 1 ][ 'items' ][ 0 ][ 'condition' ] = array( 'interactive_fields' );
 
-
 $z_mini_menu_settings_sections[ 2 ][ 'name' ] = 'other_settings';
 $z_mini_menu_settings_sections[ 2 ][ 'title' ] = __('Other settings', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 2 ][ 'callback' ] = 'z_mini_menu_other_section_text';
 $z_mini_menu_settings_sections[ 2 ][ 'items' ] = array();
-
-$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 3 ][ 'name' ] = 'when_to_show';
-$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 3 ][ 'title' ] = __('Toolbar replacement', 'z-mini-admin-menu');
-$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 3 ][ 'label' ] = __('Do not replace the admin bar.<br />When unchecked (this is the default and recommended), the Mini Admin Menu will replace the standard admin bar.<br />When checked, the standard WP admin bar will show when the Toolbar option "Show Toolbar when viewing site" is checked on the user profile page.', 'z-mini-admin-menu');
-$z_mini_menu_settings_sections[ 2 ][ 'items' ][ 3 ][ 'condition' ] = array( '' );
 
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 0 ][ 'name' ] = 'bg_color';
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 0 ][ 'title' ] = __('Background color', 'z-mini-admin-menu');
@@ -130,10 +124,13 @@ $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 2 ][ 'label' ] = __('', 'z-mini-
 $z_mini_menu_settings_sections[ 2 ][ 'items' ][ 2 ][ 'condition' ] = array( 'use_roles_permit' );
 
 
+
+
 if ( !defined( 'Z_MINI_MENU_SETTINGS_SECTIONS' ) ) {
     define( 'Z_MINI_MENU_SETTINGS_SECTIONS', $z_mini_menu_settings_sections );
-	
 }
+
+
 
 
 /*
@@ -229,10 +226,9 @@ if ( !function_exists( 'z_mini_menu_register_settings' ) ) {
                 }
             }
         }
-	
+
 		// add order settings
 		add_settings_section( 'order_items', 'Ordering of existing menu-items', 'z_mini_menu_ordering_section_text', 'z_mini_menu_plugin_order');
-		
 
     }
     add_action( 'admin_init', 'z_mini_menu_register_settings' );
@@ -253,10 +249,10 @@ if ( !function_exists( 'z_mini_menu_add_settings_page' ) ) {
 	
     function z_mini_menu_add_settings_page() {
         add_options_page( 'Wordpress mini admin settings', 'WP mini menu', 'manage_options', 'z_mini_menu_plugin', 'z_mini_menu_render_settings_page' );
-		add_options_page( 'Ordering mini admin menu items', 'WP mini menu order', 'manage_options', 'z_mini_menu_plugin_order', 'z_mini_menu_render_order_items_page' );
+		// add_options_page( 'Ordering mini admin menu items', 'WP mini menu order', 'manage_options', 'z_mini_menu_plugin_order', 'z_mini_menu_render_settings_page' );
 		
 		// remove ordering from menu
-		remove_submenu_page( 'options-general.php', 'z_mini_menu_plugin_order' );
+		// remove_submenu_page( 'options-general.php', 'z_mini_menu_plugin_order' );
     }
 	add_action( 'admin_menu', 'z_mini_menu_add_settings_page', 10 );
 }
@@ -272,42 +268,27 @@ if ( !function_exists( 'z_mini_menu_render_settings_page' ) ) {
 
     function z_mini_menu_render_settings_page() {
 ?>
+
 		<div class="wrap">
 			<h1><?php _e('Wordpress Mini Menu settings', 'z-mini-admin-menu'); ?></h1>	
-			<h2 class="nav-tab-wrapper" id="wpseo-tabs">
-				<a class="nav-tab nav-tab-active" id="manage-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=z_mini_menu_plugin' ) ); ?>"><?php _e('Manage items', 'z-mini-admin-menu'); ?></a>
-				<a class="nav-tab" id="order-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=z_mini_menu_plugin_order' ) ); ?>"><?php _e('Sort items', 'z-mini-admin-menu'); ?></a>
-			</h2>
+
+            <?php
+                $active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'manage_options';
+
+            ?><h2 class="nav-tab-wrapper">
+                <a class="nav-tab<?php echo $active_tab == 'manage_options' ? ' nav-tab-active' : ''; ?>" id="manage-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=z_mini_menu_plugin&tab=manage_options' ) ); ?>"><?php _e('Manage items', 'z-mini-admin-menu'); ?></a>
+                <a class="nav-tab<?php echo $active_tab == 'order_options' ? ' nav-tab-active' : ''; ?>" id="order-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=z_mini_menu_plugin&tab=order_options' ) ); ?>"><?php _e('Sort items', 'z-mini-admin-menu'); ?></a>
+            </h2>
+
 			<form action="options.php" method="post">
 				<?php
+
+                if( $active_tab == 'manage_options' ) {
 					settings_fields( 'z_mini_menu_plugin_options' );
 					do_settings_sections( 'z_mini_menu_plugin' );
-					submit_button();
-				?>
-			</form>
-		</div>
-<?php
-	}
-}
+                }
 
-
-/*
- * 3.b.2. Render ordering items page
- *
- *
- */ 
-if ( !function_exists( 'z_mini_menu_render_order_items_page' ) ) {
-
-    function z_mini_menu_render_order_items_page() {
-?>
-		<div class="wrap">
-			<h1><?php _e('Wordpress Mini Menu settings', 'z-mini-admin-menu'); ?></h1>
-			<h2 class="nav-tab-wrapper" id="wpseo-tabs">
-				<a class="nav-tab" id="manage-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=z_mini_menu_plugin' ) ); ?>"><?php _e('Manage items', 'z-mini-admin-menu'); ?></a>
-				<a class="nav-tab nav-tab-active" id="order-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=z_mini_menu_plugin_order' ) ); ?>"><?php _e('Sort items', 'z-mini-admin-menu'); ?></a>
-			</h2>
-			<form action="options.php" method="post">
-				<?php
+                if( $active_tab == 'order_options' ) {
 					settings_fields( 'z_mini_menu_plugin_order' );
 					do_settings_sections( 'z_mini_menu_plugin_order' );
 
@@ -335,7 +316,7 @@ if ( !function_exists( 'z_mini_menu_render_order_items_page' ) ) {
 					}
 					// loop through remaining options
 					foreach($options as $key => $option) {
-						if( $key == 'bg_color' || $key == 'use_after_main' || $key == 'use_roles' || $key == 'when_to_show') {
+						if( $key == 'bg_color' || $key == 'use_after_main' || $key == 'use_roles') {
 							continue;
 						}
 						if( $key == 'use_custom' ) {
@@ -374,14 +355,20 @@ if ( !function_exists( 'z_mini_menu_render_order_items_page' ) ) {
 					}							
 					echo '</div>';
 
-					submit_button();
+                }
 
+					submit_button();
 				?>
 			</form>
 		</div>
 <?php
 	}
 }
+
+
+
+
+
 
 
 
@@ -410,6 +397,7 @@ function z_mini_menu_item_display( $args ) {
     echo '<input type="checkbox" id="' . esc_attr($name) . '" name="z_mini_menu_plugin_options[' . esc_attr($name) . '][checked]" value="1"' . checked( 1, $checked, false ) . '/><label for="' . esc_attr($name) . '"> ' . z_mini_menu_esc_html_allowed($label) . '</label>';
 
 }
+
 
 
 
@@ -479,8 +467,10 @@ function z_mini_menu_color_picker_item_display( $args ) {
         echo esc_attr( $options[ $name ] );
     }
     echo '"/>';
-
 }
+
+
+
 /*
  * 4.d. User roles permit options settings field
  *
@@ -508,25 +498,36 @@ function z_mini_menu_use_roles_item_display( $args ) {
 }
 
 
+
 /*
  * 4.e. Text sections
  *
  *
  */
 function z_mini_menu_main_section_text() { /* Main settings text */
-    echo '<p>Here you can set all the options for using the WordPress Mini Menu.<br />Note that these are global settings for all users. Whether or not these options are actually shown, is dependent of the invidual capabilities and roles.</p>';
+    echo '<p>' . __('Here you can set all the options for using the WordPress Mini Menu.', 'z-mini-admin-menu') . '<br />' . __('Note that these are global settings for all users. Whether or not these options are actually shown, is dependent of the invidual capabilities and roles.', 'z-mini-admin-menu') . '</p>';
 }
 
 function z_mini_menu_custom_section_text() { /* Custom settings text */ }
 
-function z_mini_menu_other_section_text() { /* Other settings text */ }
+function z_mini_menu_other_section_text() { /* Other settings text */
 
-function z_mini_menu_ordering_section_text() { /* Order section text */
-    echo '<p>Here you can sort the existing menu items.</p>';
+    // do_action('admin_notices');
+
+    echo '<table class="form-table" role="presentation"><tbody><tr><th scope="row">';
+    echo '<span class="z-warning">' . __('Please note', 'z-mini-admin-menu') . '</span>';
+    echo '</th><td>';
+    echo __('As of version 2.0.2, the "Toolbar replacement" option is no longer available.', 'z-mini-admin-menu');
+    echo '<br>';
+    echo __('Toolbar preferences can now be managed per user profile.', 'z-mini-admin-menu');
+    echo '<br>';
+    echo __('By default, the Mini Menu will replace the WP Toolbar for the permitted roles below.', 'z-mini-admin-menu');
+    echo '</td></tr></tbody></table>';
 }
 
-
-
+function z_mini_menu_ordering_section_text() { /* Order section text */
+    echo '<p>' . __('Here you can sort the existing menu items.', 'z-mini-admin-menu') . '</p>';
+}
 
 
 
@@ -563,8 +564,6 @@ function z_mini_menu_esc_html_allowed( $str ) {
 
 
 
-
-
 /*
  * Print select dropdown for roles
  *
@@ -586,11 +585,14 @@ function z_mini_menu_print_roles_dropdown_options( $selected = 'administrator') 
 
 
 
+
+
 /*
  * Enqueue scripts and styles
  *
  *
  */
+add_action( 'admin_enqueue_scripts', 'z_mini_menu_add_admin_scripts' );
 function z_mini_menu_add_admin_scripts( $hook ) {
     if ( is_admin() ) {
 		$plugin_url = plugins_url( '/', __FILE__ );
@@ -600,4 +602,43 @@ function z_mini_menu_add_admin_scripts( $hook ) {
 		wp_enqueue_script( 'z-mini-admin-scripts', esc_url($admin_scripts), array( 'wp-color-picker', 'jquery-ui-sortable' ), false, true );
     }
 }
-add_action( 'admin_enqueue_scripts', 'z_mini_menu_add_admin_scripts' );
+
+
+
+
+
+/*
+ * Add WP Mini menu preference to the individual user settings (edit-user.php
+ * and profile.php) pages
+ * 
+ *
+ */
+add_action( 'show_user_profile', 'z_mini_menu_add_extra_user_fields' );
+add_action( 'edit_user_profile', 'z_mini_menu_add_extra_user_fields' );
+function z_mini_menu_add_extra_user_fields( $user ) {
+    ?>
+	<section id="z-mini-admin-personal-settings">
+        <h3><?php _e('WP Mini Menu', 'z-mini-admin-menu'); ?></h3>
+        <table class="form-table">
+            <tr class="z-mini-admin-personal-settings-item">
+                <th><label for="job_title"><?php _e('Hide Mini Menu', 'z-mini-admin-menu'); ?></label></th>
+                <td><?php
+					$hide_mini_menu_explicitly = get_user_meta($user->ID, 'z_mini_admin_hide_mini_menu_explicitly', true)	;
+					$selected_html = '';
+					if( $hide_mini_menu_explicitly == 1 ) {
+						$selected_html = ' checked="checked"';
+					};    
+						echo '<label><input type="checkbox" name="z_mini_admin_hide_mini_menu_explicitly" value="1"'.$selected_html.'> '. __('Prefer regular toolbar over WP Mini Menu', 'z-mini-admin-menu') .'</label>';
+				?><p class="description"><?php _e('Show the regular WP toolbar on the front-end, not the WP Mini Menu (only when \'Show toolbar when viewung site \' is checked, of course).', 'z-mini-admin-menu'); ?></p></td>
+            </tr>
+        </table>
+	</section>
+    <?php
+}
+
+// Saving Updated fields data
+add_action( 'personal_options_update', 'z_mini_menu_save_extra_user_fields' );
+add_action( 'edit_user_profile_update', 'z_mini_menu_save_extra_user_fields' );
+function z_mini_menu_save_extra_user_fields( $user_id ) {
+    update_user_meta( $user_id, 'z_mini_admin_hide_mini_menu_explicitly', filter_var($_POST['z_mini_admin_hide_mini_menu_explicitly'], FILTER_SANITIZE_NUMBER_INT) );
+}
