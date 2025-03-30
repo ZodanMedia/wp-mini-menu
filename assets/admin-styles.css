@@ -5,14 +5,37 @@
  * Author: Zodan
  * Author URI: https://zodan.nl
  */
+:root {
+    --zmam-color-red: #f00;
+    --zmam-color-bg-warning: #666;
+    --zmam-color-text-warning: #fff;
+    --zmam-color-bg-panel: #fff;
+    --zmam-color-text-panel: #fff;
+    --zmam-color-bg-icon-picked: #000;;
+    --zmam-color-text-icon-picked: #fff;
+    --zmam-color-bg-icon-picker-container: #fff;
+    --zmam-color-box-shadow-icon-picker-container: 0 1px 2px rgba(0, 0, 0, 0.1);
+    --zmam-width-icon-picker-icon: 20px;
+    --zmam-height-icon-picker-icon: 20px;
+    --zmam-color-icon-picker-item: #373737;
+    --zmam-color-border-icon-picker-item: #dfdfdf;
+    --zmam-color-border-icon-picker-item-hover: #999;
+    --zmam-color-bg-icon-picker-item-hover: #efefef;
+    --zmam-color-text-notice: #000;
+}
+.z-warning {
+    background: var(--zmam-color-bg-warning);
+    color: var(--zmam-color-text-warning);
+    padding: 0.25rem 1rem;
+    border-radius: 0.4rem;
+}
 .z-mini-menu-ia-item {
-    background: #fff;
+    background: var(--zmam-color-bg-panel);
     border-radius: 4px;
     padding: 10px;
     margin-bottom: 10px;
     position: relative;
 }
-.z-mini-menu-ia-item-add-box {}
 .z-mini-menu-btn-add-ia i {
     margin-top: 4px;
 }
@@ -21,8 +44,8 @@
     width: 20px;
     height: 20px;
     text-align: center;
-    background: #f00;
-    color: #fff;
+    background: var(--zmam-color-red);
+    color: var(--zmam-color-text-warning);
     border-radius: 50%;
     line-height: 17px;
     font-size: 20px;
@@ -45,8 +68,8 @@
     margin: 0;
     margin-right: 10px;
     padding: 0 6px;
-    color: #fff;
-    background: #000;
+    color: var(--zmam-color-text-icon-picked);
+    background: var(--zmam-color-bg-icon-picked);;
     border-radius: 4px;
 }
 .dashicon-picker-container {
@@ -54,9 +77,9 @@
     width: 220px;
     height: 252px;
     font-size: 14px;
-    background-color: #fff;
-    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    background-color: var(--zmam-color-bg-icon-picker-container);
+    -webkit-box-shadow: var(--zmam-color-box-shadow-icon-picker-container);
+    box-shadow: var(--zmam-color-box-shadow-icon-picker-container);
     overflow: hidden;
     padding: 5px;
     box-sizing: border-box;
@@ -67,25 +90,24 @@
     margin-bottom: 10px;
 }
 .dashicon-picker-container ul .dashicons {
-    width: 20px;
-    height: 20px;
-    font-size: 20px;
+    width: var(--zmam-width-icon-picker-icon);
+    height: var(--zmam-height-icon-picker-icon);
+    font-size: var(--zmam-height-icon-picker-icon);
 }
 .dashicon-picker-container ul li {
-    display: inline-block;
     margin: 5px;
     float: left;
 }
 .dashicon-picker-container ul li a {
     display: block;
     text-decoration: none;
-    color: #373737;
+    color: var(--zmam-color-icon-picker-item);
     padding: 5px 5px;
-    border: 1px solid #dfdfdf;
+    border: 1px solid var(--zmam-color-border-icon-picker-item);
 }
 .dashicon-picker-container ul li a:hover {
-    border-color: #999;
-    background: #efefef;
+    border-color: var(--zmam-color-icon-picker-item-hover);
+    background: var(--zmam-color-bg-icon-picker-item-hover);
 }
 .dashicon-picker-control {
     height: 32px;
@@ -105,7 +127,7 @@
     width: 140px;
 }
 .z-mini-menu-sort-item {
-	background: #fff;
+	background: var(--zmam-color-bg-panel);
 	border-radius: 5px;
 	margin-bottom: 8px;
 	padding: 10px 10px 10px 20px;
@@ -117,5 +139,32 @@
     float: right;
     opacity: .4;
 }
-
-
+#z_mini_menu_notices {
+    background-color: #08B2CA45;
+    background-image: radial-gradient(#6fc4d2 1px, transparent 0);
+    background-size: 11px 11px;
+    background-position: -8px -8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 4px 10px 20px;
+    border-left-width: 8px;
+    border-color: #08B2CA45;
+    border-left-color: #08B2CA;
+    border-radius: 6px;
+  }
+#z_mini_menu_notices p {
+    color: var(--zmam-color-text-notice);
+    font-size: 15px;
+}
+#z_mini_menu_notices .notice-dismiss {
+    position: relative;
+}
+#z_mini_menu_notices .notice-dismiss::before {
+    color: var(--zmam-color-text-notice);
+    font-size: 20px;
+}
+#z_mini_menu_notices .notice-dismiss:hover::before {
+    color: var(--zmam-color-text-notice);
+    transform: scale(1.1);
+}

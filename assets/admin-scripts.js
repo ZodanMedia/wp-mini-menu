@@ -1,12 +1,28 @@
 /**
  * Plugin Name: Z Mini Admin Menu
- * Admin scripts
+ * Admin scripts for user-edit.php / profile.php
  * 
  * Author: Zodan
  * Author URI: https://zodan.nl
  */
 (function ($) {
     'use strict';
+
+    /*
+     * On a user settings page, move the WP user preference settings underneath
+     * the 'show admin bar' settings
+     *
+     */
+    if ( $('#z-mini-admin-personal-settings').length ) {
+        let z_mini_admin_personal_settings_rows = $('.z-mini-admin-personal-settings-item');
+        let z_wp_toolbar_row = $('tr.show-admin-bar.user-admin-bar-front-wrap');
+        $( z_mini_admin_personal_settings_rows ).insertAfter( $( z_wp_toolbar_row ) );
+        $('#z-mini-admin-personal-settings').remove();
+    }
+
+
+    
+
     // Add Color Picker  in admin to all inputs that have 'z-mini-menu-color-field' class
     $('.z-mini-menu-color-field').wpColorPicker();
 
