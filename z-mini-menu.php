@@ -1,13 +1,14 @@
 <?php
 /**
  * Plugin Name: Z Mini Admin Menu
- * Contributors: martenmoolenaar
+ * Contributors: martenmoolenaar, zodannl
  * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
  * Tags: admin menu, tiny menu, mini menu, cleanup, development, elementor
  * Requires at least: 5.5
- * Tested up to: 6.7.2
+ * Tested up to: 6.8
  * Description: A frontpage mini menu to access most common admin items when te admin bar is not active
- * Version: 2.0.3
+ * Version: 2.0.4
+ * Stable Tag: 2.0.4
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-admin-menu
@@ -138,8 +139,8 @@ class zMiniMenu {
 				if( ! empty($notice['type'] ) ) {
 					$notice_type = esc_attr($notice['type']);
 				}
-           		echo '<div id="z_mini_menu_notices" class="'.$notice_type.' notice is-dismissible">';
-                echo '<p>' . wp_kses_post( $notice['text'] ) . '</p>';
+           		echo '<div id="z_mini_menu_notices" class="'.esc_html($notice_type).' notice is-dismissible">';
+                echo '<p>' . wp_kses_post( esc_html( $notice['text'] ) ) . '</p>';
 				echo '</div>';
             }
             delete_option( 'z_mini_menu_plugin_notices' );
@@ -198,7 +199,7 @@ class zMiniMenu {
 	 */
 	public function plugin_setup() {
 
-        $this->plugin_version = '2.0.3'; // Z_MINI_ADMIN_MENU_VER
+        $this->plugin_version = '2.0.4'; // Z_MINI_ADMIN_MENU_VER
 		$this->plugin_url = plugins_url( '/', __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_URL
 		$this->plugin_path = plugin_dir_path( __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_PATH
 		$this->load_language( 'z-mini-admin-menu' );
@@ -273,6 +274,7 @@ class zMiniMenu {
 		$options = get_option( 'z_mini_menu_plugin_options' );
 
 		if ( isset( $options[ 'use_after_main' ] ) && $options[ 'use_after_main' ]['checked'] == 1 ) {
+			add_action( 'after_main', array( __CLASS__, 'enqueue_assets' ) );
 			add_action( 'after_main', array( self::get_instance(), 'build_z_mini_menu' ) );
 		} else {
 			add_action( 'wp_footer', array( self::get_instance(), 'build_z_mini_menu' ) );
@@ -387,7 +389,7 @@ class zMiniMenu {
 			if ( current_user_can( 'edit_posts' ) ) {
 				$edit_post_url = get_edit_post_link();
 				
-				echo '<div class="z_mini_menu-item"><a class="btn-edit-post-link" href="'.$edit_post_url.'"><span class="dashicons-before dashicons-edit-large"><span class="sr-only">'.esc_html__( 'Edit', 'z-mini-admin-menu' ).'</span></span></a></div>';
+				echo '<div class="z_mini_menu-item"><a class="btn-edit-post-link" href="'.esc_url($edit_post_url).'"><span class="dashicons-before dashicons-edit-large"><span class="sr-only">'.esc_html__( 'Edit', 'z-mini-admin-menu' ).'</span></span></a></div>';
 
 				// Add 'Edit with Elementor' if Elementor is available and post can be edited with elementor
 				$elementor_url = self::get_elementor_edit_link();
@@ -419,7 +421,7 @@ class zMiniMenu {
 			echo '</div>';
 			
 			// 2d. Include dashicons
-			echo '<link rel="stylesheet" id="dashicons-css" href="'.site_url().'/wp-includes/css/dashicons.min.css"  media="all" />';
+			echo '<link rel="stylesheet" id="dashicons-css" href="'.esc_url(site_url()).'/wp-includes/css/dashicons.min.css"  media="all" />';
 			
 			// 2e. Include the minified stylesheet
 			echo '<style>#admin-z-mini-menu{position:fixed;z-index:9999;top:150px;left:0;display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto;border-radius:0 5px 5px 0;background:var(--z-mini-menu-bg-color);font-family:sans-serif;}#admin-z-mini-menu .z_mini_menu-item-holder{display:none}#admin-z-mini-menu.open .z_mini_menu-item-holder{display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto}#admin-z-mini-menu .z_mini_menu-item{width:40px;height:40px;background:transparent;display:flex;justify-content:center;align-content:center;align-items:center;position:relative}#admin-z-mini-menu .z_mini_menu-item a{display:block;position:relative;font-size:16px;line-height:16px;text-decoration:none;transition:all 250ms ease-in-out;color:#ffffff90;color:#fff;opacity:.65}#admin-z-mini-menu .z_mini_menu-item a:hover{text-decoration:none;color:#fff;opacity:1}#admin-z-mini-menu .z_mini_menu-item.collapse,#admin-z-mini-menu.open .z_mini_menu-item.expand{display:none}#admin-z-mini-menu.open .z_mini_menu-item.collapse{display:flex}#admin-z-mini-menu ul.fold-out-sub{list-style:none;padding-left:0;position:absolute;background:var(--z-mini-menu-bg-color);left:40px;top:0;border-radius:0 5px 5px 0;margin:5px 0;display:none}#admin-z-mini-menu .has-submenu:hover ul.fold-out-sub{display:block}#admin-z-mini-menu ul.fold-out-sub li{list-style:none;margin:0;padding:0}#admin-z-mini-menu ul.fold-out-sub li a{padding:6px 16px 6px 12px;font-size:13px;;line-height:16px;}#admin-z-mini-menu .dashicons-before.flipped::before{transform:rotate(180deg)}#admin-z-mini-menu .z_mini_menu-item a .icon.image,#admin-z-mini-menu .z_mini_menu-item a .icon.svg{display:inline-block;width:20px;height:20px;background-repeat:no-repeat;background-position:center;background-size:20px auto}#admin-z-mini-menu .sr-only{border:0;clip:rect(1px,1px,1px,1px);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal}.z-mini-admin-menu-badge{position:absolute;display:inline-block;vertical-align:top;box-sizing:border-box;margin:-8px 0 0 -1px;padding:0 5px;min-width:18px;height:18px;border-radius:9px;background-color:#d63638;color:#fff;font-size:11px;line-height:1.6;text-align:center;z-index: 26;}</style>';
@@ -541,7 +543,7 @@ class zMiniMenu {
 						$no_updates += !empty($plugin_updates) ? count($plugin_updates) : 0;
 						$no_updates += !empty($theme_updates) ? count($theme_updates) : 0;
 						if( $no_updates > 0 ) {
-							echo '<span class="z-mini-admin-menu-badge">'.$no_updates.'</span>';
+							echo '<span class="z-mini-admin-menu-badge">'.esc_html($no_updates).'</span>';
 						}
 					}				
 				}
@@ -658,7 +660,7 @@ class zMiniMenu {
 	 * @since v1.0
 	 */
     public static function add_plugin_settings_link( $links ) {
-        $settings_link = '<a href="options-general.php?page=z_mini_menu_plugin">' . __( 'Settings' ) . '</a>';
+        $settings_link = '<a href="options-general.php?page=z_mini_menu_plugin">' . __( 'Settings', 'z-mini-admin-menu' ) . '</a>';
         array_unshift( $links, $settings_link );
         return $links;
     }

@@ -1,16 +1,19 @@
 === Z Mini Admin Menu ===
-Contributors: martenmoolenaar
+Contributors: martenmoolenaar, zodannl
 Donate link: https://www.buymeacoffee.com/zodan
 Tags: admin menu, tiny menu, mini menu, cleanup, development
-Description: A frontpage mini menu to access most common admin items when te admin bar is not active
+Description: A frontpage mini menu to access most common admin items when the admin bar is not active
+Version: 2.0.4
+Stable Tag: 2.0.4
+Author: Zodan
+Author URI: https://zodan.nl
 Requires at least: 5.5
-Tested up to: 6.7.2
-Stable tag: 2.0.3
+Tested up to: 6.8
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 
-A front-end mini menu to access most common admin items when te admin bar is not active. Super comfy when you don't want the big default admin bar, but just a tiny button when you are developing (or maintaining) a website.
+A front-end mini menu to access most common admin items when the admin bar is not active. Super comfy when you don't want the big default admin bar, but just a tiny button when you are developing (or maintaining) a website.
 
 
 == Description ==
@@ -77,6 +80,9 @@ Yes. We currently have on our roadmap:
 
 
 == Changelog ==
+
+= 2.0.4 =
+* Fixed tiny warnings
 
 = 2.0.3 =
 * Fixed little annoying empty array() bug

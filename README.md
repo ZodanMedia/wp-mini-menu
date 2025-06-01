@@ -27,7 +27,7 @@ See https://speelwei.zodan.nl/wp-mini-menu/
 
 ## WordPress version support
 
-This should work as of WordPress v5.5 up till v6.7.2
+This should work as of WordPress v5.5 up till v6.8
 
 
 ## Contributing
