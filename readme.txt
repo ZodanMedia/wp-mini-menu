@@ -1,5 +1,5 @@
 === Z Mini Admin Menu ===
-Contributors: martenmoolenaar, zodannl
+Contributors: zodannl, martenmoolenaar
 Donate link: https://www.buymeacoffee.com/zodan
 Tags: admin menu, tiny menu, mini menu, cleanup, development
 Description: A frontpage mini menu to access most common admin items when the admin bar is not active

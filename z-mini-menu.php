@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Z Mini Admin Menu
- * Contributors: martenmoolenaar, zodannl
+ * Contributors: zodannl, martenmoolenaar
  * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
  * Tags: admin menu, tiny menu, mini menu, cleanup, development, elementor
  * Requires at least: 5.5
