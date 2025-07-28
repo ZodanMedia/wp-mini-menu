@@ -1,20 +1,20 @@
 === Z Mini Admin Menu ===
 Contributors: zodannl, martenmoolenaar
-Donate link: https://www.buymeacoffee.com/zodan
 Tags: admin menu, tiny menu, mini menu, cleanup, development
-Description: A frontpage mini menu to access most common admin items when the admin bar is not active
-Version: 2.0.4
-Stable Tag: 2.0.4
+Description: A compact frontpage mini menu to replace the big ugly admin toolbar
+Version: 2.0.6
+Stable Tag: 2.0.6
 Author: Zodan
 Author URI: https://zodan.nl
+Plugin URI: https://plugins.zodan.nl/wordpress-mini-admin-menu/
 Requires at least: 5.5
 Tested up to: 6.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Donate link: https://www.buymeacoffee.com/zodan
 
 
-A front-end mini menu to access most common admin items when the admin bar is not active. Super comfy when you don't want the big default admin bar, but just a tiny button when you are developing (or maintaining) a website.
-
+This mini menu is super comfy: not the big default admin bar, but just a tiny button. Great when you are developing (or maintaining) websites.
 
 == Description ==
 
@@ -80,6 +80,14 @@ Yes. We currently have on our roadmap:
 
 
 == Changelog ==
+
+= 2.0.6 =
+* Removed load_text_domain()
+* Fixed text domain mismatch
+
+= 2.0.5 =
+* Small security updates
+* Assets are now loading asynchronously
 
 = 2.0.4 =
 * Fixed tiny warnings

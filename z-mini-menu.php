@@ -2,13 +2,13 @@
 /**
  * Plugin Name: Z Mini Admin Menu
  * Contributors: zodannl, martenmoolenaar
- * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
+ * Plugin URI: https://plugins.zodan.nl/wordpress-mini-admin-menu/
  * Tags: admin menu, tiny menu, mini menu, cleanup, development, elementor
  * Requires at least: 5.5
  * Tested up to: 6.8
  * Description: A frontpage mini menu to access most common admin items when te admin bar is not active
- * Version: 2.0.4
- * Stable Tag: 2.0.4
+ * Version: 2.0.6
+ * Stable Tag: 2.0.6
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-admin-menu
@@ -199,10 +199,9 @@ class zMiniMenu {
 	 */
 	public function plugin_setup() {
 
-        $this->plugin_version = '2.0.4'; // Z_MINI_ADMIN_MENU_VER
+        $this->plugin_version = '2.0.6'; // Z_MINI_ADMIN_MENU_VER
 		$this->plugin_url = plugins_url( '/', __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_URL
 		$this->plugin_path = plugin_dir_path( __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_PATH
-		$this->load_language( 'z-mini-admin-menu' );
 
         include ( $this->plugin_path . 'inc/settings.php' );
         $this->predefined_items = $z_mini_menu_predefined_items;
@@ -251,7 +250,26 @@ class zMiniMenu {
 
 			// Hide the wp toolbar
 			add_action('wp_loaded', array( $this, 'add_filter_hide_admin_bar' ) );
+			
+			
 			// Show the menu
+			add_action( 'wp_enqueue_scripts', function(){
+				$stylesheet = $this->plugin_url . 'assets/styles.css';
+				wp_enqueue_style( 'dashicons' );
+				wp_register_style( 'z-mini-admin-menu-styles', esc_url($stylesheet), array( 'dashicons' ), $this->plugin_version );
+				wp_enqueue_style( 'z-mini-admin-menu-styles' );
+			});
+			add_action( 'wp_enqueue_scripts', function(){
+				// $script = $this->plugin_url . 'assets/z-mini-admin-menu.js';
+				$script = $this->plugin_url . 'assets/z-mini-admin-menu.min.js';
+				wp_register_script( 'z-mini-admin-menu-script', esc_url($script), null, $this->plugin_version, array('in_footer' => true, 'strategy' => 'defer' ) );
+
+				wp_enqueue_script( 'z-mini-admin-menu-script');
+				wp_localize_script('z-mini-admin-menu-script', 'z_mini_admin_menu_data', array(
+					'dashicons' => site_url('/wp-includes/css/dashicons.min.css')
+				));
+			});
+
 			self::show_z_mini_menu();
 
 		}
@@ -421,16 +439,11 @@ class zMiniMenu {
 			echo '</div>';
 			
 			// 2d. Include dashicons
-			echo '<link rel="stylesheet" id="dashicons-css" href="'.esc_url(site_url()).'/wp-includes/css/dashicons.min.css"  media="all" />';
-			
-			// 2e. Include the minified stylesheet
-			echo '<style>#admin-z-mini-menu{position:fixed;z-index:9999;top:150px;left:0;display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto;border-radius:0 5px 5px 0;background:var(--z-mini-menu-bg-color);font-family:sans-serif;}#admin-z-mini-menu .z_mini_menu-item-holder{display:none}#admin-z-mini-menu.open .z_mini_menu-item-holder{display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto}#admin-z-mini-menu .z_mini_menu-item{width:40px;height:40px;background:transparent;display:flex;justify-content:center;align-content:center;align-items:center;position:relative}#admin-z-mini-menu .z_mini_menu-item a{display:block;position:relative;font-size:16px;line-height:16px;text-decoration:none;transition:all 250ms ease-in-out;color:#ffffff90;color:#fff;opacity:.65}#admin-z-mini-menu .z_mini_menu-item a:hover{text-decoration:none;color:#fff;opacity:1}#admin-z-mini-menu .z_mini_menu-item.collapse,#admin-z-mini-menu.open .z_mini_menu-item.expand{display:none}#admin-z-mini-menu.open .z_mini_menu-item.collapse{display:flex}#admin-z-mini-menu ul.fold-out-sub{list-style:none;padding-left:0;position:absolute;background:var(--z-mini-menu-bg-color);left:40px;top:0;border-radius:0 5px 5px 0;margin:5px 0;display:none}#admin-z-mini-menu .has-submenu:hover ul.fold-out-sub{display:block}#admin-z-mini-menu ul.fold-out-sub li{list-style:none;margin:0;padding:0}#admin-z-mini-menu ul.fold-out-sub li a{padding:6px 16px 6px 12px;font-size:13px;;line-height:16px;}#admin-z-mini-menu .dashicons-before.flipped::before{transform:rotate(180deg)}#admin-z-mini-menu .z_mini_menu-item a .icon.image,#admin-z-mini-menu .z_mini_menu-item a .icon.svg{display:inline-block;width:20px;height:20px;background-repeat:no-repeat;background-position:center;background-size:20px auto}#admin-z-mini-menu .sr-only{border:0;clip:rect(1px,1px,1px,1px);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal}.z-mini-admin-menu-badge{position:absolute;display:inline-block;vertical-align:top;box-sizing:border-box;margin:-8px 0 0 -1px;padding:0 5px;min-width:18px;height:18px;border-radius:9px;background-color:#d63638;color:#fff;font-size:11px;line-height:1.6;text-align:center;z-index: 26;}</style>';
+			// echo '<link rel="stylesheet" id="dashicons-css" href="'.esc_url(site_url()).'/wp-includes/css/dashicons.min.css"  media="all" />';
 			
 			// end 2c. end template
 			echo '</template>';
-			
-			// 2f. Include the JavaScript
-			echo '<script>customElements.define("z-mini-menu",class extends HTMLElement{constructor(){super();let template=document.getElementById("z-mini-menu-template");let templateContent=template.content;const shadowRoot=this.attachShadow({mode:"open"});shadowRoot.appendChild(templateContent.cloneNode(true));shadowRoot.getElementById("expand-z-mini-menu").addEventListener("click",(event)=>{event.preventDefault();shadowRoot.getElementById("admin-z-mini-menu").classList.add("open")});shadowRoot.getElementById("collapse-z-mini-menu").addEventListener("click",(event)=>{event.preventDefault();shadowRoot.getElementById("admin-z-mini-menu").classList.remove("open")})}});</script>';
+
 
 		}
 	}
@@ -518,9 +531,6 @@ class zMiniMenu {
 
 			} elseif( !empty($item['svg']) ) {
 				echo '<span class="icon svg" style="background-image:url('.esc_attr($item['svg']).') !important;">';
-
-			} elseif( !empty($item['image']) ) {
-				echo '<span class="icon image"><img src="' . esc_url($item['image']) .'" alt="">';
 
 			} else {
 				echo '<span class="dashicons-before dashicons-smiley">';
@@ -682,27 +692,6 @@ class zMiniMenu {
 
 
 	/**
-	 * Loads translation file.
-	 *
-	 * Accessible to other classes to load different language files (admin and
-	 * front-end for example).
-	 *
-	 * @wp-hook init
-	 * @param   string $domain
-	 * @since   v2.0 [2024.11.15]
-	 * @return  void
-	 */
-	public function load_language( $text_domain ) {
-		load_plugin_textdomain(
-			$text_domain,
-			false,
-			false // $this->plugin_path . '/languages'
-		);
-	}
-
-
-
-	/**
 	 * Return false as filter return value
 	 *
 	 * @since v2.0.2
@@ -723,3 +712,4 @@ class zMiniMenu {
 	}
 
 }
+

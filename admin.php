@@ -3,7 +3,6 @@
 /**
  * Settings page for WordPress mini admin menu
  *
- * Plugin URI: https://speelwei.zodan.nl/wp-mini-menu/
  *
  * Author: Zodan
  * Author URI: https://zodan.nl
@@ -266,17 +265,28 @@ if ( !function_exists( 'z_mini_menu_add_settings_page' ) ) {
 if ( !function_exists( 'z_mini_menu_render_settings_page' ) ) {
 
     function z_mini_menu_render_settings_page() {
+        add_filter('admin_footer_text', 'z_mini_menu_admin_footer_print_thankyou', 900);
 ?>
 
 		<div class="wrap">
 			<h1><?php esc_attr_e('WP Mini Menu settings', 'z-mini-admin-menu'); ?></h1>	
 
             <?php
-                $active_tab = isset( $_GET[ 'tab' ] ) ? wp_unslash($_GET[ 'tab' ]) : 'manage_options';
+                $manage_options_uri = admin_url( 'options-general.php?page=z_mini_menu_plugin&tab=manage_options' );
+                $order_options_uri = admin_url( 'options-general.php?page=z_mini_menu_plugin&tab=order_options' );
+
+                $active_tab = 'manage_options';
+                if( isset( $_GET[ 'tab' ] ) && isset( $_GET[ '_wpnonce' ] ) ) {
+                    if( wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET[ '_wpnonce' ] ) ), 'manage_options_tab' ) ) {
+                        $active_tab = 'manage_options';
+                    } elseif( wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET[ '_wpnonce' ] ) ), 'order_options_tab' ) ) {
+                        $active_tab = 'order_options';
+                    }
+                }
 
             ?><h2 class="nav-tab-wrapper">
-                <a class="nav-tab<?php echo $active_tab == 'manage_options' ? ' nav-tab-active' : ''; ?>" id="manage-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=z_mini_menu_plugin&tab=manage_options' ) ); ?>"><?php esc_attr_e('Manage items', 'z-mini-admin-menu'); ?></a>
-                <a class="nav-tab<?php echo $active_tab == 'order_options' ? ' nav-tab-active' : ''; ?>" id="order-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=z_mini_menu_plugin&tab=order_options' ) ); ?>"><?php esc_attr_e('Sort items', 'z-mini-admin-menu'); ?></a>
+                <a class="nav-tab<?php echo $active_tab == 'manage_options' ? ' nav-tab-active' : ''; ?>" id="manage-tab" href="<?php echo esc_url( wp_nonce_url( $manage_options_uri, 'manage_options_tab' ) ); ?>"><?php esc_attr_e('Manage items', 'z-mini-admin-menu'); ?></a>
+                <a class="nav-tab<?php echo $active_tab == 'order_options' ? ' nav-tab-active' : ''; ?>" id="order-tab" href="<?php echo esc_url( wp_nonce_url( $order_options_uri , 'order_options_tab') ); ?>"><?php esc_attr_e('Sort items', 'z-mini-admin-menu'); ?></a>
             </h2>
 
 			<form action="options.php" method="post">
@@ -393,7 +403,7 @@ function z_mini_menu_item_display( $args ) {
 		}	
 	}
     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-    echo '<input type="checkbox" id="' . esc_attr($name) . '" name="z_mini_menu_plugin_options[' . esc_attr($name) . '][checked]" value="1"' . checked( 1, $checked, false ) . '/><label for="' . esc_attr($name) . '"> ' . z_mini_menu_esc_html_allowed($label) . '</label>';
+    echo '<input type="checkbox" id="' . esc_attr($name) . '" name="z_mini_menu_plugin_options[' . esc_attr($name) . '][checked]" value="1"' . checked( 1, intval($checked), false ) . '/><label for="' . esc_attr($name) . '"> ' . z_mini_menu_esc_html_allowed($label) . '</label>';
 
 }
 
@@ -433,8 +443,7 @@ function z_mini_menu_ia_item_display( $args ) {
 				if ( isset( $options[ $name ][ $item_key ][ 'icon' ] ) ) {
                 	echo esc_attr( $options[ $name ][ $item_key ][ 'icon' ] );
             	} ?>"/><input type="button" data-target="#<?php echo esc_attr($name); ?>\[<?php echo esc_attr($item_key); ?>\]\[icon\]" data-icon="#<?php echo esc_attr($name); ?>\[<?php echo esc_attr($item_key); ?>\]\[icon\]_icon" class="button dashicons-picker" value="..." /></span></p>
-				
-			
+
 				<p><label><?php esc_html_e('Restricted to', 'z-mini-admin-menu'); ?></label><select name="z_mini_menu_plugin_options[<?php echo esc_attr($name); ?>][<?php echo esc_attr($item_key); ?>][role]"><?php z_mini_menu_print_roles_dropdown_options( esc_attr( $options[ $name ][ $item_key ][ 'role' ]) ); ?></select></p>
 
 				<div class="z-mini-menu-btn-remove-ia">-</div>
@@ -579,7 +588,15 @@ function z_mini_menu_print_roles_dropdown_options( $selected = 'administrator') 
 		if( $role == $selected) { $selected_html = ' selected="selected"'; };
 		$options_html .= '<option value="'.esc_attr($role).'"'.$selected_html.'>'. translate_user_role($details['name']) .'</option>';
     }
-	echo esc_html($options_html);
+    echo wp_kses(
+        $options_html,
+        [
+            'option' => [
+                'value' => [],
+                'selected' => [],
+            ]
+        ]
+    );
 }
 
 
@@ -620,15 +637,16 @@ function z_mini_menu_add_extra_user_fields( $user ) {
         <h3><?php esc_html_e('WP Mini Menu', 'z-mini-admin-menu'); ?></h3>
         <table class="form-table">
             <tr class="z-mini-admin-personal-settings-item">
-                <th><label for="job_title"><?php esc_html_e('Hide Mini Menu', 'z-mini-admin-menu'); ?></label></th>
+                <th scope="row"><?php esc_html_e('Hide Mini Menu', 'z-mini-admin-menu'); ?></th>
                 <td><?php
+                    wp_nonce_field( 'z_mini_menu_user_setting_nonce', 'z_mini_menu_user_setting_nonce');
 					$hide_mini_menu_explicitly = get_user_meta($user->ID, 'z_mini_admin_hide_mini_menu_explicitly', true)	;
 					$selected_html = '';
 					if( $hide_mini_menu_explicitly == 1 ) {
 						$selected_html = ' checked="checked"';
 					};    
 						echo '<label><input type="checkbox" name="z_mini_admin_hide_mini_menu_explicitly" value="1"'.esc_html($selected_html).'> '. esc_html__('Prefer regular toolbar over WP Mini Menu', 'z-mini-admin-menu') .'</label>';
-				?><p class="description"><?php esc_html_e('Show the regular WP toolbar on the front-end, not the WP Mini Menu (only when \'Show toolbar when viewung site \' is checked, of course).', 'z-mini-admin-menu'); ?></p></td>
+				?><p class="description"><?php esc_html_e('Show the regular WP toolbar on the front-end, not the WP Mini Menu (only when \'Show toolbar when viewing site \' is checked, of course).', 'z-mini-admin-menu'); ?></p></td>
             </tr>
         </table>
 	</section>
@@ -639,7 +657,25 @@ function z_mini_menu_add_extra_user_fields( $user ) {
 add_action( 'personal_options_update', 'z_mini_menu_save_extra_user_fields' );
 add_action( 'edit_user_profile_update', 'z_mini_menu_save_extra_user_fields' );
 function z_mini_menu_save_extra_user_fields( $user_id ) {
-    if( !empty( $_POST['z_mini_admin_hide_mini_menu_explicitly'] ) ) {
-        update_user_meta( $user_id, 'z_mini_admin_hide_mini_menu_explicitly', filter_var(wp_unslash($_POST['z_mini_admin_hide_mini_menu_explicitly']), FILTER_SANITIZE_NUMBER_INT) );
+    if( isset( $_POST[ 'z_mini_menu_user_setting_nonce' ] ) ) {
+        if( wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ 'z_mini_menu_user_setting_nonce' ] ) ), 'z_mini_menu_user_setting_nonce' ) ) {
+            if( !empty( $_POST['z_mini_admin_hide_mini_menu_explicitly'] ) ) {
+                $value = filter_var(wp_unslash( $_POST['z_mini_admin_hide_mini_menu_explicitly'] ), FILTER_SANITIZE_NUMBER_INT);
+            } else {
+                $value = 0;
+            }
+            update_user_meta( $user_id, 'z_mini_admin_hide_mini_menu_explicitly', esc_attr( $value ) );
+        }
     }
+}
+
+
+function z_mini_menu_admin_footer_print_thankyou( $data ) {
+    $data = '<p class="zThanks"><a href="https://zodan.nl" target="_blank" rel="noreferrer">' .
+                esc_html__('Made with', 'z-mini-admin-menu') . 
+                '<svg id="heart" data-name="heart" xmlns="http://www.w3.org/2000/svg" width="745.2" height="657.6" version="1.1" viewBox="0 0 745.2 657.6"><path class="heart" d="M372,655.6c-2.8,0-5.5-1.3-7.2-3.6-.7-.9-71.9-95.4-159.9-157.6-11.7-8.3-23.8-16.3-36.5-24.8-60.7-40.5-123.6-82.3-152-151.2C0,278.9-1.4,217.6,12.6,158.6,28,93.5,59,44.6,97.8,24.5,125.3,10.2,158.1,2.4,190.2,2.4s.3,0,.4,0c34.7,0,66.5,9,92.2,25.8,22.4,14.6,70.3,78,89.2,103.7,18.9-25.7,66.8-89,89.2-103.7,25.7-16.8,57.6-25.7,92.2-25.8,32.3-.1,65.2,7.8,92.8,22.1h0c38.7,20.1,69.8,69,85.2,134.1,14,59.1,12.5,120.3-3.8,159.8-28.5,69-91.3,110.8-152,151.2-12.8,8.5-24.8,16.5-36.5,24.8-88.1,62.1-159.2,156.6-159.9,157.6-1.7,2.3-4.4,3.6-7.2,3.6Z"></path></svg>' .
+                esc_html__('by Zodan', 'z-mini-admin-menu') .
+            '</a></p>';
+
+    return $data;
 }

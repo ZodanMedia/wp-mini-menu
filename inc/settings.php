@@ -92,7 +92,7 @@ $z_mini_menu_predefined_items['use_acf'][ 'condition' ] = array( 'if_class_exist
 
 $z_mini_menu_predefined_items['use_wpml'][ 'id' ] = 'use_wpml';
 $z_mini_menu_predefined_items['use_wpml'][ 'name' ] = __('Manage WPML', 'z-mini-admin-menu');
-$z_mini_menu_predefined_items['use_wpml'][ 'image' ] = plugins_url('/sitepress-multilingual-cms/res/img/icon16.png');
+$z_mini_menu_predefined_items['use_wpml'][ 'svg' ] = plugins_url('/sitepress-multilingual-cms/res/img/icon16.svg');
 $z_mini_menu_predefined_items['use_wpml'][ 'url' ] = admin_url( 'admin.php?page=sitepress-multilingual-cms/menu/languages.php' );
 $z_mini_menu_predefined_items['use_wpml'][ 'capability' ] = 'wpml_manage_woocommerce_multilingual';
 $z_mini_menu_predefined_items['use_wpml'][ 'condition' ] = array( 'if_function_exists', 'icl_object_id' );
@@ -103,6 +103,9 @@ $z_mini_menu_predefined_items['use_wpml'][ 'condition' ] = array( 'if_function_e
  * 
  */
 $options = get_option( 'z_mini_menu_plugin_options' );
+if( empty( $options ) ) {
+    $options = array();
+}
 /*
  * 3. Loop through all custom defined items in the options table
  * 

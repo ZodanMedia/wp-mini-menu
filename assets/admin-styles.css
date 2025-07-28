@@ -24,7 +24,7 @@
     --zmam-color-text-notice: #000;
 
 }
-#adminmenu a[href="options-general.php?page=z_mini_menu_plugin"]:before {
+#adminmenu a[href*="?page=z_mini_menu_plugin"]:before {
     display: inline-block;
     content: "";
     width: 18px;
@@ -38,7 +38,7 @@
     background-size: cover;
     background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJtaW5pTWVudSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PHBhdGggaWQ9Imljb24iIGZpbGw9IiNmZmZmZmYiIGQ9Ik0yNTYsMEMxMTQuOCwwLDAsMTE0LjgsMCwyNTZzMTE0LjgsMjU2LDI1NiwyNTYsMjU2LTExNC44LDI1Ni0yNTZTMzk3LjIsMCwyNTYsMFpNMzYyLjcsMzYyLjdoLTIxMy4zYy0xMS44LDAtMjEuMy05LjYtMjEuMy0yMS4zczkuNS0yMS4zLDIxLjMtMjEuM2gyMTMuM2MxMS44LDAsMjEuMyw5LjYsMjEuMywyMS4zLDAsMTEuOC05LjUsMjEuMy0yMS4zLDIxLjNaTTM2Mi43LDI3Ny4zaC0yMTMuM2MtMTEuOCwwLTIxLjMtOS42LTIxLjMtMjEuM3M5LjUtMjEuMywyMS4zLTIxLjNoMjEzLjNjMTEuOCwwLDIxLjMsOS42LDIxLjMsMjEuM3MtOS41LDIxLjMtMjEuMywyMS4zWk0zNjIuNywxOTJoLTIxMy4zYy0xMS44LDAtMjEuMy05LjYtMjEuMy0yMS4zczkuNS0yMS4zLDIxLjMtMjEuM2gyMTMuM2MxMS44LDAsMjEuMyw5LjYsMjEuMywyMS4zcy05LjUsMjEuMy0yMS4zLDIxLjNaIi8+PC9zdmc+")
 }
-#adminmenu .current a[href="options-general.php?page=z_mini_menu_plugin"]:before {
+#adminmenu .current a[href*="?page=z_mini_menu_plugin"]:before {
     opacity: 0.9;
 }
 .z-warning {
@@ -185,4 +185,45 @@
 #z_mini_menu_notices .notice-dismiss:hover::before {
     color: var(--zmam-color-text-notice);
     transform: scale(1.1);
+}
+
+
+.zThanks {
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+}
+.zThanks a {
+    text-decoration: none;
+    color: inherit;
+}
+.zThanks .heart {
+	fill: #F6017A;
+}
+.zThanks a {
+    text-decoration: none;
+    color: inherit;
+}
+.zThanks a:hover {
+    text-decoration: underline;
+    color: #F6017A;
+}
+.zThanks svg {
+	width: 14px;
+	height: auto;
+	vertical-align: middle;
+	margin: 0 0.4rem;
+}
+.zThanks svg {
+	animation: 1.75s linear infinite z-heart-pulse;
+}
+@keyframes z-heart-pulse {
+	0% { transform: scale(1); }
+	20% { transform: scale(1.2); }
+	40% { transform: scale(1); }
+	60% { transform: scale(1.2); }
+	100% { transform: scale(1); }
 }

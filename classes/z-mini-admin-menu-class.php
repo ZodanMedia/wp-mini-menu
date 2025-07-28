@@ -6,7 +6,15 @@
      */
     class zMiniMenu {
 
-        public static function show_z_mini_menu() {
+
+		public $plugin_url = '';
+		public $plugin_version = '1.99999.1';
+
+        public function show_z_mini_menu() {
+
+			// require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			$this->plugin_url = plugins_url('/', __FILE__);
+
             // Enqueue assets
             add_action( 'wp_footer', array( __CLASS__, 'z_mini_menu_enqueue_assets' ) );
 
@@ -18,6 +26,17 @@
             } else {
                 add_action( 'wp_footer', array( __CLASS__, 'embed_z_mini_menu' ) );
             }
+
+
+			// Prepare the menu
+			add_action( 'wp_enqueue_scripts', function(){
+				$stylesheet = $this->plugin_url . 'assets/styles.css';
+				wp_enqueue_style( 'z-theme-switcher-styles', esc_url($stylesheet), array( 'dashicons' ), $this->plugin_version );
+			});
+			add_action( 'wp_enqueue_scripts', function(){
+				$script = $this->plugin_url . 'assets/z-mini-admin-menu.js';
+				wp_enqueue_script( 'z-mini-admin-menu-script', esc_url($script), null, $this->plugin_version, array('in_footer' => true, 'strategy' => 'defer' ) );
+			});
 
         }
 
@@ -63,7 +82,7 @@
 				// check for possible role restriction for the user
 				if( !empty($item['role']) ) {
 					$continue = false;
-					if( z_mini_menu_user_has_role( $item['role'] ) ) {
+					if( self::user_has_roles( $item['role'] ) ) {
 						$continue = true;
 					}
 					if(!$continue) {
@@ -106,9 +125,6 @@
 				} elseif( !empty($item['svg']) ) {
 					echo '<span class="icon svg" style="background-image:url('.esc_attr($item['svg']).') !important;">';
 
-				} elseif( !empty($item['image']) ) {
-					echo '<span class="icon image"><img src="' . esc_url($item['image']) .'" alt="">';
-
 				} else {
 					echo '<span class="dashicons-before dashicons-smiley">';
 				}
@@ -145,6 +161,9 @@
 					echo '</ul>';
 				}
                 echo '</div>';
+
+
+							
             }
         }
 
@@ -153,10 +172,10 @@
 
 
         // Embedding the Mini Menu
-        public static function embed_z_mini_menu() {
+        public function embed_z_mini_menu() {
 			global $z_mini_menu_predefined_items;
 					
-			$options = wp_parse_args( get_option( 'z_mini_menu_plugin_options' ), Z_MINI_ADMIN_MENU_DEFAULTS );
+			$options = wp_parse_args( get_option( 'z_mini_menu_plugin_options' ), $this->plugin_defaults );
 
             // only do stuff when
             // - we're not on the admin panel and
@@ -247,8 +266,6 @@
 						$bg_color = $options[ 'bg_color' ];
                     }
 					
-					
-					
 					// 2a. The custom element
 					echo '<z-mini-menu></z-mini-menu>';
 				
@@ -271,7 +288,6 @@
 						if( !empty($elementor_url) ) {
 							echo '<div class="z_mini_menu-item"><a href="' . esc_url($elementor_url) . '" title="' . esc_attr__( 'Edit with Elementor', 'z-mini-admin-menu' ) . '"><span class="icon svg" style="background-image:url('.esc_attr($elementor_svg).') !important;"><span class="sr-only">' . esc_attr__( 'Edit with Elementor', 'z-mini-admin-menu' ) . '</span></span></a></div>';
 						}
-
 
                     }
 
@@ -297,16 +313,16 @@
                     echo '</div>';
 					
 					// 2d. Include dashicons
-					echo '<link rel="stylesheet" id="dashicons-css" href="'.esc_url(site_url()).'/wp-includes/css/dashicons.min.css"  media="all" />';
+					// echo '<link rel="stylesheet" id="dashicons-css" href="'.esc_url(site_url()).'/wp-includes/css/dashicons.min.css"  media="all" />';
 					
 					// 2e. Include the minified stylesheet
-					echo '<style>#admin-z-mini-menu{position:fixed;z-index:9999;top:150px;left:0;display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto;border-radius:0 5px 5px 0;background:#000}#admin-z-mini-menu .z_mini_menu-item-holder{display:none}#admin-z-mini-menu.open .z_mini_menu-item-holder{display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto}#admin-z-mini-menu .z_mini_menu-item{width:40px;height:40px;background:transparent;display:flex;justify-content:center;align-content:center;align-items:center;position:relative}#admin-z-mini-menu .z_mini_menu-item a{display:block;position:relative;font-size:16px;line-height:16px;text-decoration:none;transition:all 250ms ease-in-out;color:#ffffff90;color:#fff;opacity:.65}#admin-z-mini-menu .z_mini_menu-item a:hover{text-decoration:none;color:#fff;opacity:1}#admin-z-mini-menu .z_mini_menu-item.collapse,#admin-z-mini-menu.open .z_mini_menu-item.expand{display:none}#admin-z-mini-menu.open .z_mini_menu-item.collapse{display:flex}#admin-z-mini-menu ul.fold-out-sub{list-style:none;padding-left:0;position:absolute;background:#000;left:40px;top:0;border-radius:0 5px 5px 0;display:none}#admin-z-mini-menu .has-submenu:hover ul.fold-out-sub{display:block}#admin-z-mini-menu ul.fold-out-sub li{list-style:none;margin:0;padding:0}#admin-z-mini-menu ul.fold-out-sub li a{padding:6px 16px 6px 12px;font-size:13px;;line-height:16px;}#admin-z-mini-menu .dashicons-before.flipped::before{transform:rotate(180deg)}#admin-z-mini-menu .z_mini_menu-item a .icon.image,#admin-z-mini-menu .z_mini_menu-item a .icon.svg{display:inline-block;width:20px;height:20px;background-repeat:no-repeat;background-position:center;background-size:20px auto}#admin-z-mini-menu .sr-only{border:0;clip:rect(1px,1px,1px,1px);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal}.z-mini-admin-menu-badge{position:absolute;display:inline-block;vertical-align:top;box-sizing:border-box;margin:-8px 0 0 -1px;padding:0 5px;min-width:18px;height:18px;border-radius:9px;background-color:#d63638;color:#fff;font-size:11px;line-height:1.6;text-align:center;z-index: 26;}</style>';
+					// echo '<style>#admin-z-mini-menu{position:fixed;z-index:9999;top:150px;left:0;display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto;border-radius:0 5px 5px 0;background:#000}#admin-z-mini-menu .z_mini_menu-item-holder{display:none}#admin-z-mini-menu.open .z_mini_menu-item-holder{display:flex;flex-direction:column;justify-content:space-between;align-content:center;align-items:center;width:40px;height:auto}#admin-z-mini-menu .z_mini_menu-item{width:40px;height:40px;background:transparent;display:flex;justify-content:center;align-content:center;align-items:center;position:relative}#admin-z-mini-menu .z_mini_menu-item a{display:block;position:relative;font-size:16px;line-height:16px;text-decoration:none;transition:all 250ms ease-in-out;color:#ffffff90;color:#fff;opacity:.65}#admin-z-mini-menu .z_mini_menu-item a:hover{text-decoration:none;color:#fff;opacity:1}#admin-z-mini-menu .z_mini_menu-item.collapse,#admin-z-mini-menu.open .z_mini_menu-item.expand{display:none}#admin-z-mini-menu.open .z_mini_menu-item.collapse{display:flex}#admin-z-mini-menu ul.fold-out-sub{list-style:none;padding-left:0;position:absolute;background:#000;left:40px;top:0;border-radius:0 5px 5px 0;display:none}#admin-z-mini-menu .has-submenu:hover ul.fold-out-sub{display:block}#admin-z-mini-menu ul.fold-out-sub li{list-style:none;margin:0;padding:0}#admin-z-mini-menu ul.fold-out-sub li a{padding:6px 16px 6px 12px;font-size:13px;;line-height:16px;}#admin-z-mini-menu .dashicons-before.flipped::before{transform:rotate(180deg)}#admin-z-mini-menu .z_mini_menu-item a .icon.image,#admin-z-mini-menu .z_mini_menu-item a .icon.svg{display:inline-block;width:20px;height:20px;background-repeat:no-repeat;background-position:center;background-size:20px auto}#admin-z-mini-menu .sr-only{border:0;clip:rect(1px,1px,1px,1px);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal}.z-mini-admin-menu-badge{position:absolute;display:inline-block;vertical-align:top;box-sizing:border-box;margin:-8px 0 0 -1px;padding:0 5px;min-width:18px;height:18px;border-radius:9px;background-color:#d63638;color:#fff;font-size:11px;line-height:1.6;text-align:center;z-index: 26;}</style>';
 					
 					// end 2c. end template
 					echo '</template>';
 					
 					// 2f. Include the JavaScript
-					echo '<script>customElements.define("z-mini-menu",class extends HTMLElement{constructor(){super();let template=document.getElementById("z-mini-menu-template");let templateContent=template.content;const shadowRoot=this.attachShadow({mode:"open"});shadowRoot.appendChild(templateContent.cloneNode(true));shadowRoot.getElementById("expand-z-mini-menu").addEventListener("click",(event)=>{event.preventDefault();shadowRoot.getElementById("admin-z-mini-menu").classList.add("open")});shadowRoot.getElementById("collapse-z-mini-menu").addEventListener("click",(event)=>{event.preventDefault();shadowRoot.getElementById("admin-z-mini-menu").classList.remove("open")})}});</script>';
+					// echo '<script>customElements.define("z-mini-menu",class extends HTMLElement{constructor(){super();let template=document.getElementById("z-mini-menu-template");let templateContent=template.content;const shadowRoot=this.attachShadow({mode:"open"});shadowRoot.appendChild(templateContent.cloneNode(true));shadowRoot.getElementById("expand-z-mini-menu").addEventListener("click",(event)=>{event.preventDefault();shadowRoot.getElementById("admin-z-mini-menu").classList.add("open")});shadowRoot.getElementById("collapse-z-mini-menu").addEventListener("click",(event)=>{event.preventDefault();shadowRoot.getElementById("admin-z-mini-menu").classList.remove("open")})}});</script>';
 
                 }
             }
