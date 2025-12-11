@@ -5,7 +5,7 @@
  * Plugin URI: https://plugins.zodan.nl/wordpress-mini-admin-menu/
  * Tags: admin menu, tiny menu, mini menu, cleanup, development, elementor
  * Requires at least: 5.5
- * Tested up to: 6.8
+ * Tested up to: 6.9
  * Description: A frontpage mini menu to access most common admin items when te admin bar is not active
  * Version: 2.0.6
  * Stable Tag: 2.0.6
