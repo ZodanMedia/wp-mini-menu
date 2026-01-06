@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Z Mini Admin Menu
+ * Plugin Name: Zodan Mini Admin Menu
  * Contributors: zodannl, martenmoolenaar
  * Plugin URI: https://plugins.zodan.nl/wordpress-mini-admin-menu/
  * Tags: admin menu, tiny menu, mini menu, cleanup, development, elementor

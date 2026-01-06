@@ -1,4 +1,4 @@
-=== Z Mini Admin Menu ===
+=== Zodan Mini Admin Menu ===
 Contributors: zodannl, martenmoolenaar
 Tags: admin menu, tiny menu, mini menu, cleanup, development
 Description: A compact frontpage mini menu to replace the big ugly admin toolbar
