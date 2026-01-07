@@ -1,5 +1,11 @@
 <?php
 
+// If this file is called directly, abort.
+if ( !defined( 'WPINC' ) ) {
+    die;
+}
+
+
 /*
  * 1.  All predefined settings
  * 
@@ -102,25 +108,25 @@ $z_mini_menu_predefined_items['use_wpml'][ 'condition' ] = array( 'if_function_e
  * 2. Get all saved settings from the options table
  * 
  */
-$options = get_option( 'z_mini_menu_plugin_options' );
-if( empty( $options ) ) {
-    $options = array();
+$z_mini_menu_options = get_option( 'z_mini_menu_plugin_options' );
+if( empty( $z_mini_menu_options ) ) {
+    $z_mini_menu_options = array();
 }
 /*
  * 3. Loop through all custom defined items in the options table
  * 
  */
-if ( !empty( $options[ 'use_custom' ] ) ) {
-    foreach ( $options[ 'use_custom' ] as $key => $custom_item ) {
-        $z_mini_menu_predefined_items['use_custom'][$key] = $custom_item;
+if ( !empty( $z_mini_menu_options[ 'use_custom' ] ) ) {
+    foreach ( $z_mini_menu_options[ 'use_custom' ] as $z_mini_menu_option_key => $z_mini_menu_option_custom_item ) {
+        $z_mini_menu_predefined_items['use_custom'][$z_mini_menu_option_key] = $z_mini_menu_option_custom_item;
     }
 }
 /*
  * 4. Make sure we have at least 1 role to match against
  * 
  */
-if( empty( $options['use_roles']) ) {
-    $options['use_roles'] = array (
+if( empty( $z_mini_menu_options['use_roles']) ) {
+    $z_mini_menu_options['use_roles'] = array (
         0 => 'administrator'
     );
 }

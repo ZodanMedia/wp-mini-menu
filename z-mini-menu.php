@@ -7,8 +7,8 @@
  * Requires at least: 5.5
  * Tested up to: 6.9
  * Description: A frontpage mini menu to access most common admin items when te admin bar is not active
- * Version: 2.0.6
- * Stable Tag: 2.0.6
+ * Version: 2.0.7
+ * Stable Tag: 2.0.7
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-admin-menu
@@ -25,14 +25,20 @@ if ( !defined( 'WPINC' ) ) {
 }
 
 
-
+/**
+ * Some constants
+ * 
+ */
+if ( ! defined( 'ZODAN_MINI_ADMIN_MENU_VERSION' ) ) {
+	define( 'ZODAN_MINI_ADMIN_MENU_VERSION', '2.0.7' );
+}
 
 /**
  * Start: create an instance,
  *        initialize the plugin setup
  * 
  */
-add_action(	'init',	array ( zMiniMenu::get_instance(), 'plugin_setup' ) );
+add_action(	'init',	array ( zodanMiniAdminMenu::get_instance(), 'plugin_setup' ) );
 
 
 
@@ -48,7 +54,7 @@ add_action(	'init',	array ( zMiniMenu::get_instance(), 'plugin_setup' ) );
  * 
  * 
  */
-class zMiniMenu {
+class zodanMiniAdminMenu {
 
 	/**
 	 * Plugin instance.
@@ -63,7 +69,7 @@ class zMiniMenu {
 	 *
 	 * @type string
 	 */
-	public $plugin_version = '';
+	public $plugin_version = ZODAN_MINI_ADMIN_MENU_VERSION;
 
 	/**
 	 * URL to this plugin's directory.
@@ -199,7 +205,6 @@ class zMiniMenu {
 	 */
 	public function plugin_setup() {
 
-        $this->plugin_version = '2.0.6'; // Z_MINI_ADMIN_MENU_VER
 		$this->plugin_url = plugins_url( '/', __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_URL
 		$this->plugin_path = plugin_dir_path( __FILE__ ); // Z_MINI_ADMIN_MENU_PLUGIN_PATH
 
@@ -237,7 +242,7 @@ class zMiniMenu {
 			if ( is_admin() ) {
 				return; // the mini menu only show in the front-end
 			}
-			if( ! self::user_has_roles($options['use_roles']) ) {
+			if( ! self::user_has_roles($z_mini_menu_options['use_roles']) ) {
 				return; // the user has no rights for the mini menu
 			}
 			// Get the original user preference
@@ -289,9 +294,9 @@ class zMiniMenu {
 		add_action( 'wp_footer', array( __CLASS__, 'enqueue_assets' ) );
 
 		// Add the Mini Menu after content or in the footer
-		$options = get_option( 'z_mini_menu_plugin_options' );
+		$z_mini_menu_options = get_option( 'z_mini_menu_plugin_options' );
 
-		if ( isset( $options[ 'use_after_main' ] ) && $options[ 'use_after_main' ]['checked'] == 1 ) {
+		if ( isset( $z_mini_menu_options[ 'use_after_main' ] ) && $z_mini_menu_options[ 'use_after_main' ]['checked'] == 1 ) {
 			add_action( 'after_main', array( __CLASS__, 'enqueue_assets' ) );
 			add_action( 'after_main', array( self::get_instance(), 'build_z_mini_menu' ) );
 		} else {
@@ -309,7 +314,7 @@ class zMiniMenu {
 	 * @since v2.0.2
 	 */
 	public function build_z_mini_menu() {	
-		$options = wp_parse_args( get_option( 'z_mini_menu_plugin_options' ), $this->plugin_defaults );
+		$z_mini_menu_options = wp_parse_args( get_option( 'z_mini_menu_plugin_options' ), $this->plugin_defaults );
 
 		/*
 		 * Start the menu always with an edit post link (if we can), but let's
@@ -319,28 +324,28 @@ class zMiniMenu {
 		 *
 		 */
 		
-		$options_order = get_option( 'z_mini_menu_plugin_order' );
+		$z_mini_menu_options_order = get_option( 'z_mini_menu_plugin_order' );
 		$ordered_options = array();
 
 		// re-order items
-		if( !empty($options_order) ) {
+		if( !empty($z_mini_menu_options_order) ) {
 			// loop through all ordered items and add them to new
-			foreach($options_order as $key => $option) {
+			foreach($z_mini_menu_options_order as $key => $option) {
 				if( !is_numeric($option)) {
-					if(isset($options[$option])) {
+					if(isset($z_mini_menu_options[$option])) {
 						$ordered_options[$key] = $option;
 					}
-					unset($options[$option]);
+					unset($z_mini_menu_options[$option]);
 				} else {
-					if(isset($options['use_custom'][$option])) {
+					if(isset($z_mini_menu_options['use_custom'][$option])) {
 						$ordered_options[$key] = $option;
 					}
-					unset($options['use_custom'][$option]);
+					unset($z_mini_menu_options['use_custom'][$option]);
 				}
 			}
 		}
 		// loop through remaining options
-		foreach($options as $key => $option) {
+		foreach($z_mini_menu_options as $key => $option) {
 			if( $key == 'bg_color' || $key == 'use_after_main' || $key == 'use_roles' ) {
 				continue;
 			}
@@ -390,8 +395,8 @@ class zMiniMenu {
 		if ( count( $ordered_items_with_values ) > 0 || current_user_can( 'edit_posts' ) ) {
 			// begin menu
 			$bg_color = '#000';
-			if ( !empty( $options[ 'bg_color' ] ) ) {
-				$bg_color = $options[ 'bg_color' ];
+			if ( !empty( $z_mini_menu_options[ 'bg_color' ] ) ) {
+				$bg_color = $z_mini_menu_options[ 'bg_color' ];
 			}
 			
 			// 2a. The custom element

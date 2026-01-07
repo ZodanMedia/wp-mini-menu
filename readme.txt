@@ -2,8 +2,8 @@
 Contributors: zodannl, martenmoolenaar
 Tags: admin menu, tiny menu, mini menu, cleanup, development
 Description: A compact frontpage mini menu to replace the big ugly admin toolbar
-Version: 2.0.6
-Stable Tag: 2.0.6
+Version: 2.0.7
+Stable Tag: 2.0.7
 Author: Zodan
 Author URI: https://zodan.nl
 Plugin URI: https://plugins.zodan.nl/wordpress-mini-admin-menu/
@@ -40,7 +40,7 @@ This plugin is under active development. Any feature requests are welcome at [pl
 = Install the Mini Menu from within WordPress =
 
 1. Visit the plugins page within your dashboard and select ‘Add New’;
-1. Search for ‘Mini Admin Menu’;
+1. Search for ‘Zodan Mini Admin Menu’;
 1. Activate the plugin from your Plugins page;
 1. Go to ‘after activation’ below.
 
@@ -80,6 +80,9 @@ Yes. We currently have on our roadmap:
 
 
 == Changelog ==
+
+= 2.0.7 =
+* Name changes
 
 = 2.0.6 =
 * Removed load_text_domain()
