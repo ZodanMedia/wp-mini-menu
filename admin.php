@@ -17,8 +17,8 @@ if ( !defined( 'WPINC' ) ) {
 
 /*
  * 1. Define settings sections for the plugin options page
- *
- *
+ *    a) The basic utilities like menus, widgets, plugins etc
+ *    b) The built-in supported plugins like ACF, Woo, Yoast, WPML, FluentForms, GravityForms
  */
 $z_mini_menu_settings_sections[ 0 ][ 'name' ] = 'main_settings';
 $z_mini_menu_settings_sections[ 0 ][ 'title' ] = __('Main (built-in) menu items', 'z-mini-admin-menu');
@@ -85,6 +85,10 @@ $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'title' ] = __('FluentForm
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'label' ] = __('Include a link to FluentForms', 'z-mini-admin-menu');
 $z_mini_menu_settings_sections[ 0 ][ 'items' ][ 11 ][ 'condition' ] = array( 'if_function_exists', 'wpFluentForm' );
 
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 12 ][ 'name' ] = 'use_gravityforms';
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 12 ][ 'title' ] = __('Gravity Forms', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 12 ][ 'label' ] = __('Include a link to Gravity Forms', 'z-mini-admin-menu');
+$z_mini_menu_settings_sections[ 0 ][ 'items' ][ 12 ][ 'condition' ] = array( 'if_class_exists', 'GFCommon' );
 
 
 

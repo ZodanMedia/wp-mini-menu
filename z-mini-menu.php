@@ -7,8 +7,8 @@
  * Requires at least: 5.5
  * Tested up to: 6.9
  * Description: A frontpage mini menu to access most common admin items when te admin bar is not active
- * Version: 2.0.7
- * Stable Tag: 2.0.7
+ * Version: 2.0.8
+ * Stable Tag: 2.0.8
  * Author: Zodan
  * Author URI: https://zodan.nl
  * Text Domain: z-mini-admin-menu
@@ -30,7 +30,7 @@ if ( !defined( 'WPINC' ) ) {
  * 
  */
 if ( ! defined( 'ZODAN_MINI_ADMIN_MENU_VERSION' ) ) {
-	define( 'ZODAN_MINI_ADMIN_MENU_VERSION', '2.0.7' );
+	define( 'ZODAN_MINI_ADMIN_MENU_VERSION', '2.0.8' );
 }
 
 /**
