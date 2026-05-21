@@ -8,7 +8,7 @@ Author: Zodan
 Author URI: https://zodan.nl
 Plugin URI: https://plugins.zodan.nl/wordpress-mini-admin-menu/
 Requires at least: 5.5
-Tested up to: 6.9
+Tested up to: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://www.buymeacoffee.com/zodan
