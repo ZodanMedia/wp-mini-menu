@@ -24,6 +24,10 @@
     --zmam-color-text-notice: #000;
 
 }
+#adminmenu #menu-settings.wp-not-current-submenu .wp-submenu,
+.folded #adminmenu #menu-settings.wp-has-current-submenu .wp-submenu {
+    min-width: 200px;
+}
 #adminmenu a[href*="?page=z_mini_menu_plugin"]:before {
     display: inline-block;
     content: "";
